@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>DivinePixelDrop Admin</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 20% 10%,
+                    rgba(255, 60, 150, 0.16),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(110, 70, 255, 0.12),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #10050d,
+                    #080808,
+                    #03030a
+                );
+
+            color: white;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           CHERRY BLOSSOM ANIMATION
+        ====================================================== */
+
+        .petals {
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 999;
+        }
+
+
+        .petal {
+            position: absolute;
+
+            top: -60px;
+
+            width: 13px;
+            height: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffd8e8,
+                    #ff91bd
+                );
+
+            border-radius:
+                100% 0 100% 0;
+
+            opacity: 0.85;
+
+            filter:
+                drop-shadow(
+                    0 0 5px
+                    rgba(255, 130, 190, 0.45)
+                );
+
+            animation:
+                petalFall
+                linear
+                infinite;
+        }
+
+
+        .petal:nth-child(1) {
+            left: 4%;
+            animation-duration: 8s;
+            animation-delay: -2s;
+        }
+
+        .petal:nth-child(2) {
+            left: 12%;
+            animation-duration: 11s;
+            animation-delay: -6s;
+            transform: scale(.7);
+        }
+
+        .petal:nth-child(3) {
+            left: 20%;
+            animation-duration: 9s;
+            animation-delay: -4s;
+            transform: scale(1.2);
+        }
+
+        .petal:nth-child(4) {
+            left: 29%;
+            animation-duration: 13s;
+            animation-delay: -9s;
+            transform: scale(.8);
+        }
+
+        .petal:nth-child(5) {
+            left: 38%;
+            animation-duration: 10s;
+            animation-delay: -3s;
+        }
+
+        .petal:nth-child(6) {
+            left: 47%;
+            animation-duration: 14s;
+            animation-delay: -11s;
+            transform: scale(.7);
+        }
+
+        .petal:nth-child(7) {
+            left: 56%;
+            animation-duration: 9s;
+            animation-delay: -5s;
+            transform: scale(1.1);
+        }
+
+        .petal:nth-child(8) {
+            left: 65%;
+            animation-duration: 12s;
+            animation-delay: -8s;
+        }
+
+        .petal:nth-child(9) {
+            left: 74%;
+            animation-duration: 10s;
+            animation-delay: -1s;
+            transform: scale(.8);
+        }
+
+        .petal:nth-child(10) {
+            left: 83%;
+            animation-duration: 13s;
+            animation-delay: -7s;
+            transform: scale(1.2);
+        }
+
+        .petal:nth-child(11) {
+            left: 91%;
+            animation-duration: 9s;
+            animation-delay: -4s;
+        }
+
+        .petal:nth-child(12) {
+            left: 97%;
+            animation-duration: 15s;
+            animation-delay: -12s;
+            transform: scale(.7);
+        }
+
+
+        @keyframes petalFall {
+
+            0% {
+                transform:
+                    translate3d(
+                        0,
+                        -80px,
+                        0
+                    )
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            10% {
+                opacity: .85;
+            }
+
+            50% {
+                transform:
+                    translate3d(
+                        80px,
+                        50vh,
+                        0
+                    )
+                    rotate(180deg);
+            }
+
+            100% {
+                transform:
+                    translate3d(
+                        -70px,
+                        110vh,
+                        0
+                    )
+                    rotate(360deg);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =====================================================
+           LOGIN
+        ====================================================== */
+
+        .login-page {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 25px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .login-box {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            padding: 42px 35px;
+
+            text-align: center;
+
+            border-radius: 25px;
+
+            background:
+                rgba(18, 10, 18, 0.82);
+
+            border:
+                1px solid
+                rgba(255, 150, 200, 0.16);
+
+            box-shadow:
+                0 30px 100px
+                rgba(0, 0, 0, .65),
+
+                0 0 60px
+                rgba(255, 60, 160, .08);
+
+            backdrop-filter:
+                blur(20px);
+        }
+
+
+        .logo {
+
+            width: 78px;
+            height: 78px;
+
+            margin:
+                0 auto 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-size: 25px;
+
+            font-weight: 900;
+
+            color: #351124;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #ffd0e2,
+                    #ff62a3
+                );
+
+            box-shadow:
+                0 0 30px
+                rgba(255, 80, 160, .35);
+
+            animation:
+                logoFloat
+                3s
+                ease-in-out
+                infinite;
+        }
+
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-7px);
+            }
+        }
+
+
+        .login-box h1 {
+
+            margin: 0;
+
+            font-size: 35px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #ff9fc5,
+                    #ffffff
+                );
+
+            color: transparent;
+
+            background-clip: text;
+
+            -webkit-background-clip: text;
+        }
+
+
+        .subtitle {
+
+            margin-top: 10px;
+
+            color: #bdaeb6;
+
+            font-size: 14px;
+        }
+
+
+        .login-box form {
+
+            margin-top: 28px;
+        }
+
+
+        input,
+        textarea,
+        select {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            margin-bottom: 12px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.1);
+
+            outline: none;
+
+            background:
+                rgba(255,255,255,.055);
+
+            color: white;
+
+            font-size: 14px;
+
+            transition: .25s;
+        }
+
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+
+            border-color:
+                rgba(255,120,180,.5);
+
+            box-shadow:
+                0 0 20px
+                rgba(255,60,150,.1);
+        }
+
+
+        .login-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            border: 0;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            color: #30101e;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #ffb9d4,
+                    #ff6ba8
+                );
+
+            transition: .25s;
+        }
+
+
+        .login-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 35px
+                rgba(255,60,150,.25);
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+        ====================================================== */
+
+        .dashboard {
+
+            position: relative;
+
+            z-index: 2;
+
+            min-height: 100vh;
+
+            padding:
+                35px 0 80px;
+        }
+
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1400px;
+
+            margin: auto;
+        }
+
+
+        .topbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding-bottom: 25px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+        }
+
+
+        .brand h1 {
+
+            margin: 0;
+
+            font-size: 38px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #fff,
+                    #ff9fc5,
+                    #fff
+                );
+
+            color: transparent;
+
+            background-clip: text;
+
+            -webkit-background-clip: text;
+        }
+
+
+        .brand p {
+
+            margin: 7px 0 0;
+
+            color: #a99ca4;
+
+            font-size: 13px;
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            padding:
+                11px 18px;
+
+            border-radius: 10px;
+
+            color: #ffd7e7;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid
+                rgba(255,120,180,.18);
+
+            transition: .25s;
+        }
+
+
+        .logout:hover {
+
+            background:
+                rgba(255,70,150,.16);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           STATS
+        ====================================================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+
+            margin:
+                25px 0;
+        }
+
+
+        .stat {
+
+            padding: 24px;
+
+            text-align: center;
+
+            border-radius: 17px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(12px);
+        }
+
+
+        .stat-number {
+
+            font-size: 31px;
+
+            font-weight: 900;
+
+            color: #ffafd0;
+        }
+
+
+        .stat-label {
+
+            margin-top: 7px;
+
+            color: #999;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           MESSAGES
+        ====================================================== */
+
+        .message {
+
+            padding: 13px 16px;
+
+            margin-bottom: 18px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(100,255,170,.08);
+
+            border:
+                1px solid
+                rgba(100,255,170,.18);
+
+            color: #b9ffd2;
+
+            animation:
+                messageIn
+                .35s
+                ease;
+        }
+
+
+        @keyframes messageIn {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        .error {
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            border-radius: 10px;
+
+            color: #ffd1df;
+
+            background:
+                rgba(255,70,120,.1);
+
+            border:
+                1px solid
+                rgba(255,70,120,.2);
+        }
+
+
+        /* =====================================================
+           PANELS
+        ====================================================== */
+
+        .panel {
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.3);
+
+            backdrop-filter:
+                blur(15px);
+        }
+
+
+        .panel h2 {
+
+            margin:
+                0 0 18px;
+
+            font-size: 20px;
+        }
+
+
+        /* =====================================================
+           UPLOAD
+        ====================================================== */
+
+        .upload-area {
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 16px;
+
+            border:
+                1px dashed
+                rgba(255,130,180,.28);
+
+            background:
+                rgba(255,80,150,.025);
+        }
+
+
+        .upload-area p {
+
+            color: #aaa;
+
+            margin-top: 0;
+        }
+
+
+        .file-input {
+
+            margin:
+                15px auto;
+
+            max-width: 600px;
+        }
+
+
+        .upload-btn {
+
+            padding:
+                13px 25px;
+
+            border: 0;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            color: #30101e;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff,
+                    #ffc5db,
+                    #ff70aa
+                );
+
+            transition: .25s;
+        }
+
+
+        .upload-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(255,70,150,.2);
+        }
+
+
+        /* =====================================================
+           WALLPAPER GRID
+        ====================================================== */
+
+        .gallery {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(240px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+
+        .wallpaper {
+
+            overflow: hidden;
+
+            border-radius: 17px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            transition: .3s;
+        }
+
+
+        .wallpaper:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(255,120,180,.35);
+
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,.45);
+        }
+
+
+        .wallpaper > img {
+
+            width: 100%;
+
+            height: 300px;
+
+            object-fit: cover;
+
+            display: block;
+
+            background: #111;
+
+            transition: .4s;
+        }
+
+
+        .wallpaper:hover > img {
+
+            transform:
+                scale(1.035);
+        }
+
+
+        .wallpaper-info {
+
+            padding: 15px;
+        }
+
+
+        .filename {
+
+            color: #ffb8d2;
+
+            font-size: 12px;
+
+            margin-bottom: 13px;
+
+            word-break: break-word;
+        }
+
+
+        .edit-form {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .edit-form input {
+
+            margin-bottom: 9px;
+
+            padding: 10px;
+
+            font-size: 12px;
+        }
+
+
+        .featured-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin:
+                2px 0 11px;
+
+            color: #ccc;
+
+            font-size: 12px;
+        }
+
+
+        .featured-row input {
+
+            width: auto;
+
+            margin: 0;
+        }
+
+
+        .save-btn {
+
+            width: 100%;
+
+            padding: 10px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid
+                rgba(120,255,170,.25);
+
+            background:
+                rgba(120,255,170,.1);
+
+            color: #a9ffc8;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .save-btn:hover {
+
+            background:
+                rgba(120,255,170,.2);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .delete-form {
+
+            margin-top: 8px;
+        }
+
+
+        .delete-btn {
+
+            width: 100%;
+
+            padding: 10px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid
+                rgba(255,70,110,.25);
+
+            background:
+                rgba(255,60,100,.08);
+
+            color: #ffb6c9;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .delete-btn:hover {
+
+            background:
+                rgba(255,60,100,.18);
+
+            border-color:
+                rgba(255,90,130,.4);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .empty {
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            color: #888;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 700px) {
+
+            .dashboard {
+
+                padding-top: 20px;
+            }
+
+
+            .container {
+
+                width: 94%;
+            }
+
+
+            .topbar {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+            }
+
+
+            .brand h1 {
+
+                font-size: 29px;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .panel {
+
+                padding: 17px;
+            }
+
+
+            .upload-area {
+
+                padding: 25px 15px;
+            }
+
+
+            .gallery {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+                gap: 10px;
+            }
+
+
+            .wallpaper > img {
+
+                height: 220px;
+            }
+
+
+            .wallpaper-info {
+
+                padding: 10px;
+            }
+
+
+            .filename {
+
+                font-size: 10px;
+            }
+
+
+            .edit-form input {
+
+                padding: 8px;
+
+                font-size: 10px;
+            }
+
+
+            .save-btn,
+            .delete-btn {
+
+                padding: 9px 5px;
+
+                font-size: 10px;
+            }
+        }
+
+
+        @media (max-width: 380px) {
+
+            .gallery {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .wallpaper > img {
+
+                height: 330px;
+            }
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ====================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .petal {
+
+                animation-duration:
+                    20s;
+            }
+
+            * {
+
+                scroll-behavior:
+                    auto !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         CHERRY BLOSSOM PETALS
+    ====================================================== -->
+
+    <div class="petals">
+
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+
+    </div>
+
+
+{% if not logged_in %}
+
+    <!-- =====================================================
+         LOGIN PAGE
+    ====================================================== -->
+
+    <div class="login-page">
+
+        <div class="login-box">
+
+            <div class="logo">
+                AS
+            </div>
+
+            <h1>
+                Admin Panel
+            </h1>
+
+            <div class="subtitle">
+                DivinePixelDrop Management
+            </div>
+
+
+            {% with messages = get_flashed_messages(
+                with_categories=true
+            ) %}
+
+                {% for category, message in messages %}
+
+                    <div class="error">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endwith %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('admin_login') }}"
+            >
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Admin Username"
+                    autocomplete="username"
+                    required
+                >
+
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Admin Password"
+                    autocomplete="current-password"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+                    Login to Dashboard
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+{% else %}
+
+
+    <!-- =====================================================
+         ADMIN DASHBOARD
+    ====================================================== -->
+
+    <div class="dashboard">
+
+        <div class="container">
+
+
+            <!-- TOP BAR -->
+
+            <div class="topbar">
+
+                <div class="brand">
+
+                    <h1>
+                        DivinePixelDrop
+                    </h1>
+
+                    <p>
+                        Premium Wallpaper Management
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin_logout') }}"
+                    class="logout"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        {{ gallery|length }}
+                    </div>
+
+                    <div class="stat-label">
+                        Total Wallpapers
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        ✓
+                    </div>
+
+                    <div class="stat-label">
+                        Gallery Status
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        Live
+                    </div>
+
+                    <div class="stat-label">
+                        Website Status
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(
+                with_categories=true
+            ) %}
+
+                {% for category, message in messages %}
+
+                    <div class="message">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endwith %}
+
+
+            <!-- UPLOAD PANEL -->
+
+            <div class="panel">
+
+                <h2>
+                    📤 Upload Wallpapers
+                </h2>
+
+
+                <div class="upload-area">
+
+                    <p>
+                        Select one or multiple wallpapers
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin_upload') }}"
+                        enctype="multipart/form-data"
+                    >
+
+                        <input
+                            class="file-input"
+                            type="file"
+                            name="images"
+                            accept=".jpg,.jpeg,.png,.webp,.gif"
+                            multiple
+                            required
+                        >
+
+
+                        <br>
+
+
+                        <button
+                            type="submit"
+                            class="upload-btn"
+                        >
+                            ⬆ Upload Wallpapers
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- WALLPAPER MANAGEMENT -->
+
+            <div class="panel">
+
+                <h2>
+                    🖼 Wallpaper Management
+                </h2>
+
+
+                {% if gallery %}
+
+                    <div class="gallery">
+
+                        {% for item in gallery %}
+
+                            <div class="wallpaper">
+
+
+                                <img
+                                    src="{{ url_for(
+                                        'serve_image',
+                                        filename=item.filename
+                                    ) }}"
+                                    alt="{{ item.title }}"
+                                    loading="lazy"
+                                >
+
+
+                                <div class="wallpaper-info">
+
+
+                                    <div class="filename">
+
+                                        {{ item.filename }}
+
+                                    </div>
+
+
+                                    <!-- EDIT -->
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for(
+                                            'admin_edit',
+                                            filename=item.filename
+                                        ) }}"
+                                        class="edit-form"
+                                    >
+
+
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            placeholder="Wallpaper Title"
+                                            value="{{ item.title }}"
+                                        >
+
+
+                                        <input
+                                            type="text"
+                                            name="category"
+                                            placeholder="Category"
+                                            value="{{ item.category }}"
+                                        >
+
+
+                                        <input
+                                            type="text"
+                                            name="tags"
+                                            placeholder="Tags (comma separated)"
+                                            value="{{ item.tags }}"
+                                        >
+
+
+                                        <label class="featured-row">
+
+                                            <input
+                                                type="checkbox"
+                                                name="featured"
+                                                {% if item.featured %}
+                                                    checked
+                                                {% endif %}
+                                            >
+
+                                            ⭐ Featured Wallpaper
+
+                                        </label>
+
+
+                                        <button
+                                            type="submit"
+                                            class="save-btn"
+                                        >
+                                            💾 Save Changes
+                                        </button>
+
+
+                                    </form>
+
+
+                                    <!-- DELETE -->
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for(
+                                            'admin_delete',
+                                            filename=item.filename
+                                        ) }}"
+                                        class="delete-form"
+                                        onsubmit="return confirmDelete(this)"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="delete-btn"
+                                        >
+                                            🗑 Delete Wallpaper
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                {% else %}
+
+                    <div class="empty">
+
+                        <div
+                            style="
+                                font-size:50px;
+                                margin-bottom:15px;
+                            "
+                        >
+                            🖼️
+                        </div>
+
+                        No wallpapers uploaded yet.
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+{% endif %}
+
+
+<script>
+
+
+    /* ========================================================
+       DELETE CONFIRMATION
+    ========================================================= */
+
+    function confirmDelete(form) {
+
+        const button =
+            form.querySelector(
+                ".delete-btn"
+            );
+
+        const filename =
+            button
+                ? button.dataset.filename
+                : "";
+
+
+        const message =
+            "Are you sure you want to delete this wallpaper?\n\n"
+            +
+            "This action cannot be undone.";
+
+
+        return confirm(
+            message
+        );
+    }
+
+
+    /* ========================================================
+       UPLOAD LOADING STATE
+    ========================================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            const uploadForm =
+                document.querySelector(
+                    'form[action*="admin_upload"]'
+                );
+
+
+            if (!uploadForm) {
+                return;
+            }
+
+
+            uploadForm.addEventListener(
+                "submit",
+                function() {
+
+                    const button =
+                        uploadForm.querySelector(
+                            ".upload-btn"
+                        );
+
+
+                    if (button) {
+
+                        button.disabled = true;
+
+                        button.innerHTML =
+                            "⏳ Uploading...";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

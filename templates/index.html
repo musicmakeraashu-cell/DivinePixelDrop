@@ -1,0 +1,3561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DivinePixelDrop | Premium Wallpaper Gallery</title>
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #070709;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+           PREMIUM BACKGROUND
+        ========================================================= */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: -5;
+
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(255, 40, 140, 0.18),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 85% 10%,
+                    rgba(80, 70, 255, 0.16),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(255, 20, 110, 0.13),
+                    transparent 32%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #12060e,
+                    #08080b,
+                    #03030a
+                );
+
+            animation:
+                backgroundMove
+                16s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        @keyframes backgroundMove {
+
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.08);
+            }
+        }
+
+
+        /* =========================================================
+           PREMIUM CHERRY BLOSSOM + LIGHT PARTICLES
+        ========================================================= */
+
+        .divine-effects {
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 0;
+        }
+
+        .petal {
+            position: absolute;
+
+            top: -50px;
+
+            width: 9px;
+            height: 13px;
+
+            border-radius:
+                75% 20% 75% 20%;
+
+            background:
+                radial-gradient(
+                    ellipse at 30% 25%,
+                    #fffaff 0%,
+                    #ffd4e7 25%,
+                    #ff9bc4 58%,
+                    #e95791 100%
+                );
+
+            box-shadow:
+                0 0 8px rgba(255,130,190,.75);
+
+            opacity: 0;
+
+            animation:
+                petalFall
+                var(--fall)
+                linear
+                infinite;
+
+            animation-delay:
+                var(--delay);
+
+            transform-origin:
+                center center;
+        }
+
+        .petal:nth-child(1) {
+            left: 2%;
+            --fall: 11s;
+            --delay: -2s;
+        }
+
+        .petal:nth-child(2) {
+            left: 7%;
+            --fall: 14s;
+            --delay: -9s;
+            transform: scale(.65);
+        }
+
+        .petal:nth-child(3) {
+            left: 12%;
+            --fall: 10s;
+            --delay: -5s;
+            transform: scale(1.15);
+        }
+
+        .petal:nth-child(4) {
+            left: 17%;
+            --fall: 16s;
+            --delay: -12s;
+            transform: scale(.7);
+        }
+
+        .petal:nth-child(5) {
+            left: 22%;
+            --fall: 12s;
+            --delay: -7s;
+        }
+
+        .petal:nth-child(6) {
+            left: 27%;
+            --fall: 15s;
+            --delay: -3s;
+            transform: scale(.8);
+        }
+
+        .petal:nth-child(7) {
+            left: 32%;
+            --fall: 10s;
+            --delay: -8s;
+            transform: scale(1.2);
+        }
+
+        .petal:nth-child(8) {
+            left: 37%;
+            --fall: 17s;
+            --delay: -14s;
+            transform: scale(.6);
+        }
+
+        .petal:nth-child(9) {
+            left: 42%;
+            --fall: 13s;
+            --delay: -6s;
+        }
+
+        .petal:nth-child(10) {
+            left: 47%;
+            --fall: 11s;
+            --delay: -10s;
+            transform: scale(.75);
+        }
+
+        .petal:nth-child(11) {
+            left: 52%;
+            --fall: 16s;
+            --delay: -4s;
+            transform: scale(1.15);
+        }
+
+        .petal:nth-child(12) {
+            left: 57%;
+            --fall: 12s;
+            --delay: -13s;
+            transform: scale(.6);
+        }
+
+        .petal:nth-child(13) {
+            left: 62%;
+            --fall: 14s;
+            --delay: -5s;
+        }
+
+        .petal:nth-child(14) {
+            left: 67%;
+            --fall: 10s;
+            --delay: -11s;
+            transform: scale(.8);
+        }
+
+        .petal:nth-child(15) {
+            left: 72%;
+            --fall: 17s;
+            --delay: -8s;
+            transform: scale(1.2);
+        }
+
+        .petal:nth-child(16) {
+            left: 77%;
+            --fall: 13s;
+            --delay: -2s;
+            transform: scale(.65);
+        }
+
+        .petal:nth-child(17) {
+            left: 82%;
+            --fall: 11s;
+            --delay: -9s;
+        }
+
+        .petal:nth-child(18) {
+            left: 87%;
+            --fall: 15s;
+            --delay: -6s;
+            transform: scale(.75);
+        }
+
+        .petal:nth-child(19) {
+            left: 92%;
+            --fall: 12s;
+            --delay: -12s;
+            transform: scale(1.1);
+        }
+
+        .petal:nth-child(20) {
+            left: 97%;
+            --fall: 16s;
+            --delay: -4s;
+            transform: scale(.6);
+        }
+
+
+        @keyframes petalFall {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translate3d(0,-60px,0)
+                    rotate(0deg);
+            }
+
+            8% {
+                opacity: .75;
+            }
+
+            25% {
+                transform:
+                    translate3d(70px,25vh,0)
+                    rotate(130deg);
+            }
+
+            50% {
+                transform:
+                    translate3d(-55px,52vh,0)
+                    rotate(250deg);
+            }
+
+            75% {
+                transform:
+                    translate3d(75px,78vh,0)
+                    rotate(340deg);
+            }
+
+            100% {
+                opacity: 0;
+
+                transform:
+                    translate3d(-65px,110vh,0)
+                    rotate(470deg);
+            }
+        }
+
+
+        /* Small glowing particles */
+
+        .spark {
+            position: absolute;
+
+            width: 3px;
+            height: 3px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            box-shadow:
+                0 0 8px #ff8fbe,
+                0 0 18px rgba(255,100,170,.7);
+
+            opacity: 0;
+
+            animation:
+                sparkFloat
+                var(--spark-time)
+                ease-in-out
+                infinite;
+
+            animation-delay:
+                var(--spark-delay);
+        }
+
+        .spark:nth-child(21) {
+            left: 8%;
+            top: 35%;
+            --spark-time: 7s;
+            --spark-delay: -2s;
+        }
+
+        .spark:nth-child(22) {
+            left: 18%;
+            top: 70%;
+            --spark-time: 9s;
+            --spark-delay: -5s;
+        }
+
+        .spark:nth-child(23) {
+            left: 31%;
+            top: 25%;
+            --spark-time: 8s;
+            --spark-delay: -4s;
+        }
+
+        .spark:nth-child(24) {
+            left: 45%;
+            top: 75%;
+            --spark-time: 10s;
+            --spark-delay: -7s;
+        }
+
+        .spark:nth-child(25) {
+            left: 58%;
+            top: 30%;
+            --spark-time: 8s;
+            --spark-delay: -3s;
+        }
+
+        .spark:nth-child(26) {
+            left: 72%;
+            top: 65%;
+            --spark-time: 11s;
+            --spark-delay: -8s;
+        }
+
+        .spark:nth-child(27) {
+            left: 86%;
+            top: 28%;
+            --spark-time: 7s;
+            --spark-delay: -1s;
+        }
+
+        .spark:nth-child(28) {
+            left: 94%;
+            top: 78%;
+            --spark-time: 9s;
+            --spark-delay: -6s;
+        }
+
+        @keyframes sparkFloat {
+
+            0%,100% {
+                opacity: 0;
+                transform:
+                    translate3d(0,20px,0)
+                    scale(.5);
+            }
+
+            30% {
+                opacity: .55;
+            }
+
+            60% {
+                opacity: .9;
+            }
+
+            100% {
+                opacity: 0;
+                transform:
+                    translate3d(30px,-80px,0)
+                    scale(1.4);
+            }
+        }
+
+
+        /* Ambient glow */
+
+        .ambient-glow {
+            position: fixed;
+
+            width: 430px;
+            height: 430px;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            filter: blur(100px);
+
+            opacity: .08;
+
+            z-index: -1;
+
+            animation:
+                ambientMove
+                14s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        .ambient-one {
+            left: -180px;
+            top: 15%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(255,70,170,.9),
+                    transparent 70%
+                );
+        }
+
+        .ambient-two {
+            right: -180px;
+            bottom: 5%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(90,80,255,.8),
+                    transparent 70%
+                );
+
+            animation-delay: -7s;
+        }
+
+        @keyframes ambientMove {
+
+            from {
+                transform:
+                    translate3d(0,0,0)
+                    scale(.85);
+            }
+
+            to {
+                transform:
+                    translate3d(100px,-80px,0)
+                    scale(1.15);
+            }
+        }
+
+
+        /* Keep content above effects */
+
+        header,
+        .controls,
+        .featured-wrap,
+        .gallery-info,
+        .gallery,
+        .no-results {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        header {
+            padding: 55px 20px 30px;
+
+            text-align: center;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.07);
+        }
+
+        .logo {
+            width: 78px;
+            height: 78px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-size: 24px;
+            font-weight: 900;
+
+            color: #351124;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #ffd1e4,
+                    #ff62a3
+                );
+
+            box-shadow:
+                0 0 35px rgba(255,70,160,.35),
+                0 0 90px rgba(255,40,150,.14);
+
+            animation:
+                logoFloat
+                3s
+                ease-in-out
+                infinite;
+        }
+
+        @keyframes logoFloat {
+
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        h1 {
+            margin: 0;
+
+            font-size:
+                clamp(34px,6vw,58px);
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #ff9fc7,
+                    #ffffff,
+                    #ff65a5,
+                    #ffffff
+                );
+
+            background-size: 300%;
+
+            color: transparent;
+
+            background-clip: text;
+            -webkit-background-clip: text;
+
+            animation:
+                titleShine
+                5s
+                linear
+                infinite;
+        }
+
+        @keyframes titleShine {
+
+            from {
+                background-position: 0%;
+            }
+
+            to {
+                background-position: 300%;
+            }
+        }
+
+        .subtitle {
+            margin: 13px 0 0;
+
+            color: #bbaab3;
+
+            font-size: 14px;
+
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 9px 17px;
+
+            border-radius: 50px;
+
+            color: #ffd7e7;
+
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid rgba(255,130,180,.2);
+
+            box-shadow:
+                0 0 25px rgba(255,70,160,.08);
+        }
+
+
+        /* =========================================================
+           CONTROLS
+        ========================================================= */
+
+        .controls {
+            width: 92%;
+            max-width: 1200px;
+
+            margin: 30px auto 0;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1 1 300px;
+
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            padding:
+                15px 48px 15px 18px;
+
+            border-radius: 14px;
+
+            outline: none;
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            background:
+                rgba(255,255,255,.055);
+
+            color: white;
+
+            font-size: 14px;
+
+            backdrop-filter: blur(12px);
+
+            transition: .25s;
+        }
+
+        .search-box input::placeholder {
+            color: #999;
+        }
+
+        .search-box input:focus {
+            border-color:
+                rgba(255,110,170,.55);
+
+            box-shadow:
+                0 0 25px rgba(255,60,150,.12);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            right: 17px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #aaa;
+
+            pointer-events: none;
+        }
+
+        .filter-btn,
+        .sort-btn {
+            padding: 14px 18px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            background:
+                rgba(255,255,255,.055);
+
+            color: white;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .filter-btn:hover,
+        .sort-btn:hover {
+            background:
+                rgba(255,100,170,.15);
+
+            border-color:
+                rgba(255,120,180,.35);
+        }
+
+        .filter-btn.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,100,170,.28),
+                    rgba(120,80,255,.20)
+                );
+
+            border-color:
+                rgba(255,130,190,.45);
+        }
+
+
+        /* =========================================================
+           FEATURED / NEW
+        ========================================================= */
+
+        .featured-wrap {
+            width: 92%;
+            max-width: 1400px;
+
+            margin: 30px auto 0;
+        }
+
+        .featured-heading {
+            margin: 0 0 15px;
+
+            font-size: 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #ff9fc7
+                );
+
+            color: transparent;
+
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .featured-strip {
+            display: flex;
+
+            gap: 16px;
+
+            overflow-x: auto;
+
+            padding-bottom: 12px;
+
+            scrollbar-width: thin;
+        }
+
+        .featured-card {
+            flex: 0 0 220px;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            background: #111;
+
+            border:
+                1px solid rgba(255,140,190,.25);
+
+            cursor: pointer;
+
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease;
+        }
+
+        .featured-card:hover {
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+                0 15px 40px
+                rgba(255,70,150,.15);
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 260px;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        .featured-name {
+            padding: 10px 12px;
+
+            font-size: 12px;
+
+            color: #ddd;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        /* =========================================================
+           GALLERY
+        ========================================================= */
+
+        .gallery-info {
+            width: 92%;
+            max-width: 1400px;
+
+            margin: 20px auto 0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            color: #aaa;
+
+            font-size: 13px;
+        }
+
+        .gallery {
+            width: 92%;
+            max-width: 1400px;
+
+            margin: 25px auto 80px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(250px,1fr)
+                );
+
+            gap: 22px;
+        }
+
+        .card {
+            position: relative;
+
+            overflow: hidden;
+
+            background: #111;
+
+            border-radius: 18px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            cursor: pointer;
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,.5);
+
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease,
+                border-color .35s ease;
+
+            animation:
+                cardAppear
+                .45s
+                ease
+                both;
+        }
+
+        @keyframes cardAppear {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform:
+                translateY(-8px)
+                scale(1.015);
+
+            border-color:
+                rgba(255,120,180,.40);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.7),
+                0 0 35px rgba(255,60,150,.12);
+        }
+
+        .image-wrap {
+            position: relative;
+
+            overflow: hidden;
+
+            background: #111;
+        }
+
+        .card img {
+            width: 100%;
+            height: 350px;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition:
+                transform .6s ease,
+                filter .6s ease;
+        }
+
+        .card:hover img {
+            transform:
+                scale(1.06);
+
+            filter:
+                brightness(1.08)
+                saturate(1.12);
+        }
+
+        .favorite {
+            position: absolute;
+
+            top: 12px;
+            right: 12px;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(255,255,255,.15);
+
+            background:
+                rgba(0,0,0,.45);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            z-index: 5;
+
+            backdrop-filter: blur(8px);
+
+            transition: .25s;
+        }
+
+        .favorite:hover {
+            transform:
+                scale(1.12);
+
+            background:
+                rgba(255,70,140,.25);
+        }
+
+        .favorite.active {
+            color: #ff69aa;
+
+            text-shadow:
+                0 0 15px
+                rgba(255,70,150,.8);
+        }
+
+        .name {
+            padding: 14px;
+
+            color: #ddd;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+        .no-results {
+            width: 92%;
+            max-width: 700px;
+
+            margin: 80px auto;
+
+            text-align: center;
+
+            color: #999;
+
+            display: none;
+        }
+
+        .no-results strong {
+            display: block;
+
+            color: white;
+
+            font-size: 20px;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =========================================================
+           VIEWER
+        ========================================================= */
+
+        .viewer {
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.97);
+
+            display: none;
+
+            z-index: 99999;
+
+            overflow: hidden;
+        }
+
+        .viewer.active {
+            display: block;
+        }
+
+        /* Viewer gets its own subtle animated background */
+
+        .viewer::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(255,60,160,.08),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 80% 70%,
+                    rgba(90,80,255,.08),
+                    transparent 30%
+                );
+
+            pointer-events: none;
+        }
+
+        .viewer-top {
+            position: absolute;
+
+            top: 15px;
+            left: 18px;
+            right: 18px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            z-index: 100;
+        }
+
+        .counter {
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            color: #ddd;
+
+            font-size: 13px;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .close {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.08);
+
+            color: white;
+
+            font-size: 32px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .close:hover {
+            background:
+                rgba(255,70,140,.25);
+
+            transform:
+                rotate(90deg);
+        }
+
+
+        /* =========================================================
+           VIEWER IMAGE AREA
+        ========================================================= */
+
+        .viewer-stage {
+            position: absolute;
+
+            inset:
+                75px 0 115px 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+            touch-action: none;
+
+            z-index: 10;
+        }
+
+        .zoom-container {
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            transform-origin:
+                center center;
+
+            will-change:
+                transform;
+
+            cursor: grab;
+
+            user-select: none;
+
+            z-index: 20;
+        }
+
+        .zoom-container.dragging {
+            cursor: grabbing;
+        }
+
+        .viewer-image {
+            max-width: 88vw;
+
+            max-height: 76vh;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            display: block;
+
+            user-select: none;
+
+            -webkit-user-drag: none;
+
+            box-shadow:
+                0 30px 100px
+                rgba(0,0,0,.85);
+
+            transition:
+                opacity .25s ease;
+        }
+
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
+
+        .nav-btn {
+            position: absolute;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 52px;
+            height: 52px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(255,255,255,.13);
+
+            background:
+                rgba(255,255,255,.08);
+
+            color: white;
+
+            font-size: 27px;
+
+            cursor: pointer;
+
+            z-index: 50;
+
+            transition: .25s;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background:
+                rgba(255,90,160,.25);
+
+            transform:
+                translateY(-50%)
+                scale(1.08);
+        }
+
+        .nav-prev {
+            left: 20px;
+        }
+
+        .nav-next {
+            right: 20px;
+        }
+
+
+        /* =========================================================
+           VIEWER BOTTOM CONTROLS
+        ========================================================= */
+
+        .viewer-bottom {
+            position: absolute;
+
+            bottom: 18px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            width: 95%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 10px;
+
+            z-index: 100;
+        }
+
+        .zoom-controls {
+            display: flex;
+
+            gap: 7px;
+
+            padding: 7px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            backdrop-filter: blur(12px);
+        }
+
+        .control-btn {
+            min-width: 42px;
+
+            height: 40px;
+
+            padding: 0 12px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: white;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .control-btn:hover {
+            background:
+                rgba(255,100,170,.20);
+        }
+
+        .download-panel {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 8px;
+        }
+
+        .download-btn {
+            padding: 11px 15px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255,255,255,.12);
+
+            background:
+                rgba(255,255,255,.07);
+
+            color: white;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .download-btn:hover {
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(255,110,170,.18);
+
+            border-color:
+                rgba(255,140,190,.35);
+        }
+
+        .original {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #ffd0e2
+                );
+
+            color: #24101a;
+
+            font-weight: bold;
+        }
+
+        .filename {
+            max-width: 70vw;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            color: #aaa;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           LOADING
+        ========================================================= */
+
+        .loading {
+            position: absolute;
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            border:
+                3px solid
+                rgba(255,255,255,.12);
+
+            border-top-color:
+                #ff75ad;
+
+            animation:
+                spin
+                .8s
+                linear
+                infinite;
+
+            z-index: 10;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding:
+                    42px 15px 25px;
+            }
+
+            .logo {
+                width: 68px;
+                height: 68px;
+            }
+
+            h1 {
+                font-size: 31px;
+            }
+
+            .subtitle {
+                font-size: 12px;
+            }
+
+            .gallery {
+                width: 94%;
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+                gap: 10px;
+
+                margin-top: 22px;
+            }
+
+            .card {
+                border-radius: 12px;
+            }
+
+            .card img {
+                height: 270px;
+            }
+
+            .name {
+                padding: 9px;
+
+                font-size: 10px;
+            }
+
+            .favorite {
+                width: 34px;
+                height: 34px;
+
+                font-size: 17px;
+            }
+
+            .controls {
+                width: 94%;
+            }
+
+            .search-box {
+                flex-basis: 100%;
+            }
+
+            .filter-btn,
+            .sort-btn {
+                flex: 1;
+
+                padding:
+                    12px 8px;
+
+                font-size: 12px;
+            }
+
+            .gallery-info {
+                width: 94%;
+            }
+
+            .viewer-stage {
+                inset:
+                    70px 0 145px 0;
+            }
+
+            .viewer-image {
+                max-width: 94vw;
+                max-height: 70vh;
+            }
+
+            .nav-btn {
+                width: 42px;
+                height: 42px;
+
+                font-size: 22px;
+            }
+
+            .nav-prev {
+                left: 8px;
+            }
+
+            .nav-next {
+                right: 8px;
+            }
+
+            .viewer-bottom {
+                bottom: 10px;
+            }
+
+            .download-panel {
+                gap: 5px;
+            }
+
+            .download-btn {
+                padding:
+                    9px 10px;
+
+                font-size: 10px;
+            }
+
+            .control-btn {
+                min-width: 38px;
+
+                height: 36px;
+            }
+
+            .petal {
+                width: 6px;
+                height: 9px;
+            }
+
+            .ambient-glow {
+                width: 280px;
+                height: 280px;
+
+                filter: blur(70px);
+            }
+        }
+
+        @media (max-width: 380px) {
+
+            .card img {
+                height: 235px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .download-btn {
+                padding:
+                    8px 8px;
+
+                font-size: 9px;
+            }
+        }
+
+
+        /* Reduce animation if device requests it */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .divine-effects,
+            .ambient-glow {
+                display: none;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration:
+                    .01ms !important;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         PREMIUM ANIMATION LAYER
+    ========================================================== -->
+
+    <div class="divine-effects" aria-hidden="true">
+
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+        <span class="petal"></span>
+
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+        <span class="spark"></span>
+
+    </div>
+
+    <div class="ambient-glow ambient-one"></div>
+    <div class="ambient-glow ambient-two"></div>
+
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header>
+
+        <div class="logo">
+            AS
+        </div>
+
+        <h1>
+            DivinePixelDrop
+        </h1>
+
+        <p class="subtitle">
+            Premium Digital Wallpaper Gallery
+        </p>
+
+        <div class="badge">
+            ✨ Welcome to DivinePixelDrop
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         SEARCH + FILTER
+    ========================================================== -->
+
+    <div class="controls">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search wallpapers..."
+                autocomplete="off"
+            >
+
+            <span class="search-icon">
+                🔎
+            </span>
+
+        </div>
+
+
+        <button
+            class="filter-btn active"
+            id="allBtn"
+            onclick="setFilter('all', this)"
+        >
+            All
+        </button>
+
+
+        <button
+            class="filter-btn"
+            id="favoriteBtn"
+            onclick="setFilter('favorites', this)"
+        >
+            ❤️ Favorites
+        </button>
+
+
+        <button
+            class="sort-btn"
+            onclick="toggleSort()"
+            id="sortButton"
+        >
+            A-Z
+        </button>
+
+
+        {% for cat in categories %}
+
+        <button
+            class="filter-btn"
+            onclick="setFilter('cat:{{ cat|lower }}', this)"
+        >
+            {{ cat }}
+        </button>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =========================================================
+         FEATURED
+    ========================================================== -->
+
+    {% if gallery|selectattr('featured')|list %}
+
+    <div class="featured-wrap">
+
+        <h2 class="featured-heading">
+            ✨ Featured Wallpapers
+        </h2>
+
+        <div class="featured-strip">
+
+            {% for item in gallery %}
+
+                {% if item.featured %}
+
+                <div
+                    class="featured-card"
+                    onclick="openViewer({{ item.index }})"
+                >
+
+                    <img
+                        src="{{ url_for('serve_image', filename=item.filename) }}"
+                        alt="{{ item.title }}"
+                        loading="lazy"
+                        onerror="handleImageError(this)"
+                    >
+
+                    <div class="featured-name">
+                        {{ item.title }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================================================
+         NEW ARRIVALS
+    ========================================================== -->
+
+    {% if recent %}
+
+    <div class="featured-wrap">
+
+        <h2 class="featured-heading">
+            🆕 New Arrivals
+        </h2>
+
+        <div class="featured-strip">
+
+            {% for item in recent %}
+
+            <div
+                class="featured-card"
+                onclick="openViewer({{ item.index }})"
+            >
+
+                <img
+                    src="{{ url_for('serve_image', filename=item.filename) }}"
+                    alt="{{ item.title }}"
+                    loading="lazy"
+                    onerror="handleImageError(this)"
+                >
+
+                <div class="featured-name">
+                    {{ item.title }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================================================
+         GALLERY INFO
+    ========================================================== -->
+
+    <div class="gallery-info">
+
+        <span id="resultCount">
+            Wallpapers
+        </span>
+
+        <span>
+            Click any image to view
+        </span>
+
+    </div>
+
+
+    <!-- =========================================================
+         MAIN GALLERY
+    ========================================================== -->
+
+    <div
+        class="gallery"
+        id="gallery"
+    >
+
+        {% for item in gallery %}
+
+        <div
+            class="card"
+            data-name="{{ (item.title ~ ' ' ~ item.category ~ ' ' ~ item.tags)|lower }}"
+            data-category="{{ item.category|lower }}"
+            data-index="{{ item.index }}"
+            onclick="openViewer({{ item.index }})"
+        >
+
+            <div class="image-wrap">
+
+                <img
+                    src="{{ url_for('serve_image', filename=item.filename) }}"
+                    alt="{{ item.title }}"
+                    loading="lazy"
+                    onerror="handleImageError(this)"
+                >
+
+
+                <button
+                    class="favorite"
+                    type="button"
+                    title="Add to favorites"
+                    onclick="toggleFavorite(event, {{ item.index }})"
+                >
+                    ♡
+                </button>
+
+            </div>
+
+
+            <div class="name">
+                {{ item.title }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =========================================================
+         NO RESULTS
+    ========================================================== -->
+
+    <div
+        class="no-results"
+        id="noResults"
+    >
+
+        <strong>
+            No wallpapers found
+        </strong>
+
+        Try another search or filter.
+
+    </div>
+
+
+    <!-- =========================================================
+         FULLSCREEN VIEWER
+    ========================================================== -->
+
+    <div
+        class="viewer"
+        id="viewer"
+    >
+
+
+        <!-- TOP -->
+
+        <div class="viewer-top">
+
+            <div
+                class="counter"
+                id="counter"
+            >
+                1 / 1
+            </div>
+
+
+            <div
+                class="close"
+                onclick="closeViewer()"
+                title="Close"
+            >
+                ×
+            </div>
+
+        </div>
+
+
+        <!-- PREVIOUS -->
+
+        <button
+            class="nav-btn nav-prev"
+            onclick="previousImage(event)"
+            title="Previous"
+        >
+            ‹
+        </button>
+
+
+        <!-- IMAGE STAGE -->
+
+        <div
+            class="viewer-stage"
+            id="viewerStage"
+        >
+
+            <div
+                class="loading"
+                id="viewerLoading"
+            ></div>
+
+
+            <div
+                class="zoom-container"
+                id="zoomContainer"
+            >
+
+                <img
+                    class="viewer-image"
+                    id="viewerImage"
+                    src=""
+                    alt="Wallpaper"
+                    draggable="false"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- NEXT -->
+
+        <button
+            class="nav-btn nav-next"
+            onclick="nextImage(event)"
+            title="Next"
+        >
+            ›
+        </button>
+
+
+        <!-- BOTTOM -->
+
+        <div class="viewer-bottom">
+
+            <div
+                class="filename"
+                id="viewerFilename"
+            ></div>
+
+
+            <!-- ZOOM -->
+
+            <div class="zoom-controls">
+
+                <button
+                    class="control-btn"
+                    onclick="zoomOut(event)"
+                    title="Zoom out"
+                >
+                    −
+                </button>
+
+
+                <button
+                    class="control-btn"
+                    onclick="resetZoom(event)"
+                    id="zoomResetButton"
+                    title="Reset zoom"
+                >
+                    100%
+                </button>
+
+
+                <button
+                    class="control-btn"
+                    onclick="zoomIn(event)"
+                    title="Zoom in"
+                >
+                    +
+                </button>
+
+
+                <button
+                    class="control-btn"
+                    onclick="toggleFullscreen(event)"
+                    title="Fullscreen"
+                >
+                    ⛶
+                </button>
+
+            </div>
+
+
+            <!-- DOWNLOAD -->
+
+            <div class="download-panel">
+
+                <button
+                    class="download-btn original"
+                    onclick="downloadOriginal(event)"
+                >
+                    ⬇ Original
+                </button>
+
+
+                <button
+                    class="download-btn"
+                    onclick="downloadResized(event,3840,2160)"
+                >
+                    ⬇ 4K
+                </button>
+
+
+                <button
+                    class="download-btn"
+                    onclick="downloadResized(event,2560,1440)"
+                >
+                    ⬇ 2K
+                </button>
+
+
+                <button
+                    class="download-btn"
+                    onclick="downloadResized(event,1920,1080)"
+                >
+                    ⬇ 1080p
+                </button>
+
+
+                <button
+                    class="download-btn"
+                    onclick="downloadResized(event,1280,720)"
+                >
+                    ⬇ 720p
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           IMAGE DATA
+        ===================================================== */
+
+        const images = [
+
+            {% for item in gallery %}
+
+            {
+                name:
+                    {{ item.filename|tojson }},
+
+                url:
+                    {{ url_for(
+                        'serve_image',
+                        filename=item.filename
+                    )|tojson }}
+            }
+
+            {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+        let currentIndex = 0;
+
+        let currentImageURL = "";
+
+        let currentImageName = "";
+
+        let currentZoom = 1;
+
+        let translateX = 0;
+
+        let translateY = 0;
+
+        let currentFilter = "all";
+
+        let sortAscending = true;
+
+
+        let favorites =
+            JSON.parse(
+                localStorage.getItem(
+                    "divinePixelFavorites"
+                ) || "[]"
+            );
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const viewer =
+            document.getElementById("viewer");
+
+        const viewerImage =
+            document.getElementById("viewerImage");
+
+        const zoomContainer =
+            document.getElementById("zoomContainer");
+
+        const viewerStage =
+            document.getElementById("viewerStage");
+
+        const viewerLoading =
+            document.getElementById("viewerLoading");
+
+        const counter =
+            document.getElementById("counter");
+
+        const viewerFilename =
+            document.getElementById("viewerFilename");
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const gallery =
+            document.getElementById("gallery");
+
+        const noResults =
+            document.getElementById("noResults");
+
+        const resultCount =
+            document.getElementById("resultCount");
+
+        const zoomResetButton =
+            document.getElementById("zoomResetButton");
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        searchInput.addEventListener(
+            "input",
+            filterGallery
+        );
+
+
+        function filterGallery() {
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const cards =
+                document.querySelectorAll(".card");
+
+
+            let visible = 0;
+
+
+            cards.forEach(
+                function(card) {
+
+                    const name =
+                        card.dataset.name;
+
+                    const index =
+                        Number(
+                            card.dataset.index
+                        );
+
+                    const category =
+                        card.dataset.category;
+
+
+                    const matchesSearch =
+                        name.includes(search);
+
+
+                    const matchesFilter =
+                        currentFilter === "all"
+                        ||
+
+                        (
+                            currentFilter ===
+                            "favorites"
+
+                            &&
+
+                            favorites.includes(index)
+                        )
+
+                        ||
+
+                        (
+                            currentFilter.indexOf(
+                                "cat:"
+                            ) === 0
+
+                            &&
+
+                            category ===
+                            currentFilter.slice(4)
+                        );
+
+
+                    if (
+                        matchesSearch &&
+                        matchesFilter
+                    ) {
+
+                        card.style.display =
+                            "";
+
+                        visible++;
+
+                    } else {
+
+                        card.style.display =
+                            "none";
+                    }
+
+                }
+            );
+
+
+            resultCount.textContent =
+                visible +
+                (
+                    visible === 1
+                    ? " wallpaper"
+                    : " wallpapers"
+                );
+
+
+            noResults.style.display =
+                visible === 0
+                ? "block"
+                : "none";
+        }
+
+
+        /* =====================================================
+           FILTER
+        ===================================================== */
+
+        function setFilter(
+            filter,
+            buttonEl
+        ) {
+
+            currentFilter =
+                filter;
+
+
+            document
+                .querySelectorAll(
+                    ".filter-btn"
+                )
+                .forEach(
+                    function(btn) {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            if (buttonEl) {
+
+                buttonEl.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            filterGallery();
+        }
+
+
+        /* =====================================================
+           SORT
+        ===================================================== */
+
+        function toggleSort() {
+
+            sortAscending =
+                !sortAscending;
+
+
+            const cards =
+                Array.from(
+                    document.querySelectorAll(
+                        ".card"
+                    )
+                );
+
+
+            cards.sort(
+                function(a,b) {
+
+                    const nameA =
+                        a.dataset.name;
+
+                    const nameB =
+                        b.dataset.name;
+
+
+                    return sortAscending
+
+                        ? nameA.localeCompare(
+                            nameB
+                        )
+
+                        : nameB.localeCompare(
+                            nameA
+                        );
+                }
+            );
+
+
+            cards.forEach(
+                function(card) {
+
+                    gallery.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+
+            document
+                .getElementById(
+                    "sortButton"
+                )
+                .textContent =
+                    sortAscending
+                    ? "A-Z"
+                    : "Z-A";
+        }
+
+
+        /* =====================================================
+           FAVORITES
+        ===================================================== */
+
+        function toggleFavorite(
+            event,
+            index
+        ) {
+
+            event.stopPropagation();
+
+
+            if (
+                favorites.includes(index)
+            ) {
+
+                favorites =
+                    favorites.filter(
+                        item =>
+                            item !== index
+                    );
+
+            } else {
+
+                favorites.push(index);
+            }
+
+
+            localStorage.setItem(
+                "divinePixelFavorites",
+                JSON.stringify(
+                    favorites
+                )
+            );
+
+
+            updateFavoriteButtons();
+
+            filterGallery();
+        }
+
+
+        function updateFavoriteButtons() {
+
+            document
+                .querySelectorAll(
+                    ".favorite"
+                )
+                .forEach(
+                    function(button) {
+
+                        const card =
+                            button.closest(
+                                ".card"
+                            );
+
+
+                        const index =
+                            Number(
+                                card.dataset.index
+                            );
+
+
+                        if (
+                            favorites.includes(
+                                index
+                            )
+                        ) {
+
+                            button.textContent =
+                                "♥";
+
+                            button.classList.add(
+                                "active"
+                            );
+
+                        } else {
+
+                            button.textContent =
+                                "♡";
+
+                            button.classList.remove(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+        }
+
+
+        /* =====================================================
+           OPEN VIEWER
+        ===================================================== */
+
+        function openViewer(index) {
+
+            currentIndex =
+                index;
+
+
+            loadViewerImage();
+
+
+            viewer.classList.add(
+                "active"
+            );
+
+
+            document.body.classList.add(
+                "no-scroll"
+            );
+        }
+
+
+        /* =====================================================
+           LOAD IMAGE
+        ===================================================== */
+
+        function loadViewerImage() {
+
+            const image =
+                images[currentIndex];
+
+
+            if (!image) {
+                return;
+            }
+
+
+            currentImageURL =
+                image.url;
+
+            currentImageName =
+                image.name;
+
+
+            resetZoom();
+
+
+            viewerLoading.style.display =
+                "block";
+
+
+            viewerImage.style.opacity =
+                "0";
+
+
+            viewerImage.onload =
+                function() {
+
+                    viewerLoading.style.display =
+                        "none";
+
+                    viewerImage.style.opacity =
+                        "1";
+                };
+
+
+            viewerImage.onerror =
+                function() {
+
+                    viewerLoading.style.display =
+                        "none";
+
+                    viewerImage.style.opacity =
+                        "1";
+
+                    viewerImage.alt =
+                        "Image unavailable";
+                };
+
+
+            viewerImage.src =
+                currentImageURL;
+
+
+            viewerImage.alt =
+                currentImageName;
+
+
+            viewerFilename.textContent =
+                currentImageName;
+
+
+            counter.textContent =
+                (
+                    currentIndex + 1
+                ) +
+                " / " +
+                images.length;
+        }
+
+
+        /* =====================================================
+           CLOSE
+        ===================================================== */
+
+        function closeViewer() {
+
+            viewer.classList.remove(
+                "active"
+            );
+
+
+            document.body.classList.remove(
+                "no-scroll"
+            );
+
+
+            viewerImage.src =
+                "";
+
+
+            currentImageURL =
+                "";
+        }
+
+
+        /* =====================================================
+           NEXT
+        ===================================================== */
+
+        function nextImage(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            if (
+                images.length === 0
+            ) {
+                return;
+            }
+
+
+            currentIndex =
+                (
+                    currentIndex + 1
+                ) %
+                images.length;
+
+
+            loadViewerImage();
+        }
+
+
+        /* =====================================================
+           PREVIOUS
+        ===================================================== */
+
+        function previousImage(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            if (
+                images.length === 0
+            ) {
+                return;
+            }
+
+
+            currentIndex =
+                (
+                    currentIndex - 1 +
+                    images.length
+                ) %
+                images.length;
+
+
+            loadViewerImage();
+        }
+
+
+        /* =====================================================
+           ZOOM TRANSFORM
+        ===================================================== */
+
+        function applyTransform() {
+
+            zoomContainer.style.transform =
+                "translate(" +
+                translateX +
+                "px, " +
+                translateY +
+                "px) scale(" +
+                currentZoom +
+                ")";
+
+
+            zoomResetButton.textContent =
+                Math.round(
+                    currentZoom * 100
+                ) +
+                "%";
+        }
+
+
+        /* =====================================================
+           ZOOM IN
+        ===================================================== */
+
+        function zoomIn(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            currentZoom =
+                Math.min(
+                    currentZoom + .25,
+                    5
+                );
+
+
+            applyTransform();
+        }
+
+
+        /* =====================================================
+           ZOOM OUT
+        ===================================================== */
+
+        function zoomOut(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            currentZoom =
+                Math.max(
+                    currentZoom - .25,
+                    .5
+                );
+
+
+            if (
+                currentZoom <= 1
+            ) {
+
+                translateX = 0;
+
+                translateY = 0;
+            }
+
+
+            applyTransform();
+        }
+
+
+        /* =====================================================
+           RESET ZOOM
+        ===================================================== */
+
+        function resetZoom(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            currentZoom = 1;
+
+            translateX = 0;
+
+            translateY = 0;
+
+
+            applyTransform();
+        }
+
+
+        /* =====================================================
+           MOUSE WHEEL ZOOM
+        ===================================================== */
+
+        viewerStage.addEventListener(
+            "wheel",
+            function(event) {
+
+                if (
+                    !viewer.classList.contains(
+                        "active"
+                    )
+                ) {
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                if (
+                    event.deltaY < 0
+                ) {
+
+                    currentZoom =
+                        Math.min(
+                            currentZoom + .15,
+                            5
+                        );
+
+                } else {
+
+                    currentZoom =
+                        Math.max(
+                            currentZoom - .15,
+                            .5
+                        );
+
+
+                    if (
+                        currentZoom <= 1
+                    ) {
+
+                        translateX = 0;
+
+                        translateY = 0;
+                    }
+                }
+
+
+                applyTransform();
+
+            },
+            {
+                passive: false
+            }
+        );
+
+
+        /* =====================================================
+           MOUSE DRAG / PAN
+        ===================================================== */
+
+        let dragging = false;
+
+        let startX = 0;
+
+        let startY = 0;
+
+        let startTranslateX = 0;
+
+        let startTranslateY = 0;
+
+
+        zoomContainer.addEventListener(
+            "mousedown",
+            function(event) {
+
+                if (
+                    currentZoom <= 1
+                ) {
+                    return;
+                }
+
+
+                dragging = true;
+
+
+                zoomContainer.classList.add(
+                    "dragging"
+                );
+
+
+                startX =
+                    event.clientX;
+
+                startY =
+                    event.clientY;
+
+
+                startTranslateX =
+                    translateX;
+
+                startTranslateY =
+                    translateY;
+            }
+        );
+
+
+        window.addEventListener(
+            "mousemove",
+            function(event) {
+
+                if (!dragging) {
+                    return;
+                }
+
+
+                translateX =
+                    startTranslateX +
+                    (
+                        event.clientX -
+                        startX
+                    );
+
+
+                translateY =
+                    startTranslateY +
+                    (
+                        event.clientY -
+                        startY
+                    );
+
+
+                applyTransform();
+            }
+        );
+
+
+        window.addEventListener(
+            "mouseup",
+            function() {
+
+                dragging = false;
+
+
+                zoomContainer.classList.remove(
+                    "dragging"
+                );
+            }
+        );
+
+
+        /* =====================================================
+           TOUCH PINCH + PAN
+        ===================================================== */
+
+        let touchStartX = 0;
+
+        let touchStartY = 0;
+
+        let touchStartTranslateX = 0;
+
+        let touchStartTranslateY = 0;
+
+        let pinchStartDistance = 0;
+
+        let pinchStartZoom = 1;
+
+
+        function getTouchDistance(
+            touches
+        ) {
+
+            const dx =
+                touches[0].clientX -
+                touches[1].clientX;
+
+
+            const dy =
+                touches[0].clientY -
+                touches[1].clientY;
+
+
+            return Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+        }
+
+
+        zoomContainer.addEventListener(
+            "touchstart",
+            function(event) {
+
+                if (
+                    event.touches.length === 2
+                ) {
+
+                    pinchStartDistance =
+                        getTouchDistance(
+                            event.touches
+                        );
+
+
+                    pinchStartZoom =
+                        currentZoom;
+
+                } else if (
+                    event.touches.length === 1 &&
+                    currentZoom > 1
+                ) {
+
+                    touchStartX =
+                        event.touches[0].clientX;
+
+                    touchStartY =
+                        event.touches[0].clientY;
+
+
+                    touchStartTranslateX =
+                        translateX;
+
+                    touchStartTranslateY =
+                        translateY;
+                }
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        zoomContainer.addEventListener(
+            "touchmove",
+            function(event) {
+
+                if (
+                    event.touches.length === 2
+                ) {
+
+                    event.preventDefault();
+
+
+                    const distance =
+                        getTouchDistance(
+                            event.touches
+                        );
+
+
+                    const scale =
+                        distance /
+                        pinchStartDistance;
+
+
+                    currentZoom =
+                        Math.max(
+                            .5,
+                            Math.min(
+                                5,
+                                pinchStartZoom *
+                                scale
+                            )
+                        );
+
+
+                    if (
+                        currentZoom <= 1
+                    ) {
+
+                        translateX = 0;
+
+                        translateY = 0;
+                    }
+
+
+                    applyTransform();
+
+
+                } else if (
+                    event.touches.length === 1 &&
+                    currentZoom > 1
+                ) {
+
+                    event.preventDefault();
+
+
+                    translateX =
+                        touchStartTranslateX +
+                        (
+                            event.touches[0].clientX -
+                            touchStartX
+                        );
+
+
+                    translateY =
+                        touchStartTranslateY +
+                        (
+                            event.touches[0].clientY -
+                            touchStartY
+                        );
+
+
+                    applyTransform();
+                }
+
+            },
+            {
+                passive: false
+            }
+        );
+
+
+        /* =====================================================
+           DOUBLE CLICK ZOOM
+        ===================================================== */
+
+        viewerImage.addEventListener(
+            "dblclick",
+            function(event) {
+
+                event.stopPropagation();
+
+
+                if (
+                    currentZoom > 1
+                ) {
+
+                    resetZoom();
+
+                } else {
+
+                    currentZoom = 2;
+
+                    applyTransform();
+                }
+            }
+        );
+
+
+        /* =====================================================
+           FULLSCREEN
+        ===================================================== */
+
+        function toggleFullscreen(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            if (
+                !document.fullscreenElement
+            ) {
+
+                viewer.requestFullscreen?.();
+
+            } else {
+
+                document.exitFullscreen?.();
+            }
+        }
+
+
+        /* =====================================================
+           ORIGINAL DOWNLOAD
+        ===================================================== */
+
+        function downloadOriginal(event) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            if (!currentImageURL) {
+                return;
+            }
+
+
+            const link =
+                document.createElement("a");
+
+
+            link.href =
+                currentImageURL;
+
+
+            link.download =
+                currentImageName ||
+                "DivinePixelDrop-Wallpaper";
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+        }
+
+
+        /* =====================================================
+           RESIZED DOWNLOAD
+        ===================================================== */
+
+        function downloadResized(
+            event,
+            maxWidth,
+            maxHeight
+        ) {
+
+            if (event) {
+                event.stopPropagation();
+            }
+
+
+            if (!currentImageURL) {
+                return;
+            }
+
+
+            const img =
+                new Image();
+
+
+            img.onload =
+                function() {
+
+                    let width =
+                        img.naturalWidth;
+
+
+                    let height =
+                        img.naturalHeight;
+
+
+                    const scale =
+                        Math.min(
+                            maxWidth / width,
+                            maxHeight / height,
+                            1
+                        );
+
+
+                    width =
+                        Math.round(
+                            width * scale
+                        );
+
+
+                    height =
+                        Math.round(
+                            height * scale
+                        );
+
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+
+                    canvas.width =
+                        width;
+
+                    canvas.height =
+                        height;
+
+
+                    const ctx =
+                        canvas.getContext(
+                            "2d"
+                        );
+
+
+                    ctx.drawImage(
+                        img,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+
+                    canvas.toBlob(
+                        function(blob) {
+
+                            if (!blob) {
+
+                                alert(
+                                    "Could not create image."
+                                );
+
+                                return;
+                            }
+
+
+                            const url =
+                                URL.createObjectURL(
+                                    blob
+                                );
+
+
+                            const link =
+                                document.createElement(
+                                    "a"
+                                );
+
+
+                            const baseName =
+                                currentImageName
+                                    .replace(
+                                        /\.[^/.]+$/,
+                                        ""
+                                    );
+
+
+                            link.href =
+                                url;
+
+
+                            link.download =
+                                baseName +
+                                "-" +
+                                width +
+                                "x" +
+                                height +
+                                ".jpg";
+
+
+                            document.body.appendChild(
+                                link
+                            );
+
+
+                            link.click();
+
+
+                            link.remove();
+
+
+                            setTimeout(
+                                function() {
+
+                                    URL.revokeObjectURL(
+                                        url
+                                    );
+
+                                },
+                                1000
+                            );
+
+                        },
+                        "image/jpeg",
+                        .95
+                    );
+
+                };
+
+
+            img.onerror =
+                function() {
+
+                    alert(
+                        "Image could not be processed."
+                    );
+                };
+
+
+            img.src =
+                currentImageURL;
+        }
+
+
+        /* =====================================================
+           BROKEN IMAGE
+        ===================================================== */
+
+        function handleImageError(img) {
+
+            img.style.opacity =
+                ".25";
+
+
+            if (
+                img.parentElement
+            ) {
+
+                img.parentElement.style.background =
+                    "linear-gradient(135deg,#151515,#090909)";
+            }
+        }
+
+
+        /* =====================================================
+           KEYBOARD CONTROLS
+        ===================================================== */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    !viewer.classList.contains(
+                        "active"
+                    )
+                ) {
+                    return;
+                }
+
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeViewer();
+
+
+                } else if (
+                    event.key === "ArrowRight"
+                ) {
+
+                    nextImage();
+
+
+                } else if (
+                    event.key === "ArrowLeft"
+                ) {
+
+                    previousImage();
+
+
+                } else if (
+                    event.key === "+" ||
+                    event.key === "="
+                ) {
+
+                    zoomIn();
+
+
+                } else if (
+                    event.key === "-"
+                ) {
+
+                    zoomOut();
+
+
+                } else if (
+                    event.key === "0"
+                ) {
+
+                    resetZoom();
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           BACKGROUND CLICK CLOSE
+        ===================================================== */
+
+        viewer.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target === viewer
+                ) {
+
+                    closeViewer();
+                }
+            }
+        );
+
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
+
+        updateFavoriteButtons();
+
+        filterGallery();
+
+
+    </script>
+
+</body>
+
+</html>
