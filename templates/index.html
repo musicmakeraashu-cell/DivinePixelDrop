@@ -506,7 +506,8 @@
         .featured-wrap,
         .gallery-info,
         .gallery,
-        .no-results {
+        .no-results,
+        .social-footer {
             position: relative;
             z-index: 2;
         }
@@ -927,6 +928,12 @@
                 .45s
                 ease
                 both;
+
+            /* Skip rendering work for off-screen cards.
+               Big win for long galleries, ignored safely
+               by browsers that don't support it. */
+            content-visibility: auto;
+            contain-intrinsic-size: 350px 420px;
         }
 
         @keyframes cardAppear {
@@ -1073,6 +1080,223 @@
             font-size: 20px;
 
             margin-bottom: 8px;
+        }
+
+
+        /* =========================================================
+           SOCIAL / FOLLOW SECTION
+        ========================================================= */
+
+        .social-footer {
+            width: 92%;
+            max-width: 900px;
+
+            margin: 75px auto 60px;
+
+            padding: 42px 20px 46px;
+
+            text-align: center;
+
+            border-radius: 26px;
+
+            background:
+                linear-gradient(
+                    160deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.015)
+                );
+
+            border:
+                1px solid rgba(255,255,255,.08);
+        }
+
+        .social-heading {
+            margin: 0 0 8px;
+
+            font-size: clamp(20px,3vw,26px);
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #ff9fc7
+                );
+
+            color: transparent;
+
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .social-subheading {
+            margin: 0 0 34px;
+
+            color: #a89ba3;
+
+            font-size: 13.5px;
+
+            letter-spacing: .3px;
+        }
+
+        .social-links {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 22px;
+        }
+
+        .social-card {
+            flex: 0 1 230px;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+
+            padding: 28px 18px 24px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            background: rgba(255,255,255,.035);
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            transition:
+                transform .3s ease,
+                border-color .3s ease,
+                background .3s ease;
+        }
+
+        .social-card:hover {
+            transform: translateY(-6px);
+
+            background: rgba(255,255,255,.065);
+
+            border-color: rgba(255,150,190,.3);
+        }
+
+        .social-icon {
+            width: 64px;
+            height: 64px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            margin-bottom: 16px;
+
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease;
+        }
+
+        .social-card:hover .social-icon {
+            transform: scale(1.08);
+        }
+
+        .social-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .social-icon.youtube {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff5f7a,
+                    #ff0033
+                );
+
+            box-shadow:
+                0 0 28px rgba(255,20,50,.35);
+        }
+
+        .social-card:hover .social-icon.youtube {
+            box-shadow:
+                0 0 42px rgba(255,20,50,.55);
+        }
+
+        .social-icon.tiktok {
+            background:
+                linear-gradient(
+                    135deg,
+                    #25f4ee,
+                    #131313 55%,
+                    #fe2c55
+                );
+
+            box-shadow:
+                0 0 28px rgba(255,20,110,.3);
+        }
+
+        .social-card:hover .social-icon.tiktok {
+            box-shadow:
+                0 0 42px rgba(255,20,110,.5);
+        }
+
+        .social-name {
+            font-size: 15px;
+            font-weight: 700;
+
+            color: #fff;
+
+            margin-bottom: 6px;
+        }
+
+        .social-desc {
+            font-size: 12px;
+
+            color: #9c939a;
+
+            line-height: 1.5;
+        }
+
+        .social-cta {
+            margin-top: 15px;
+
+            padding: 7px 18px;
+
+            border-radius: 50px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: .5px;
+
+            text-transform: uppercase;
+
+            color: #ffd7e7;
+
+            background: rgba(255,255,255,.06);
+
+            border: 1px solid rgba(255,130,180,.25);
+        }
+
+        @media (max-width: 500px) {
+
+            .social-footer {
+                padding: 34px 14px 36px;
+            }
+
+            .social-card {
+                flex: 1 1 140px;
+
+                padding: 22px 12px 18px;
+            }
+
+            .social-icon {
+                width: 54px;
+                height: 54px;
+            }
         }
 
 
@@ -1629,6 +1853,56 @@
                 height: 280px;
 
                 filter: blur(70px);
+
+                /* Stop the constant transform animation -
+                   this alone removes a lot of jank on phones */
+                animation: none;
+            }
+
+            /* -----------------------------------------------
+               PERFORMANCE: mobile devices struggle with many
+               simultaneous blur / backdrop-filter layers.
+               These overrides keep the same premium look but
+               remove the heaviest GPU costs so scrolling and
+               tapping feel smooth instead of stuttering.
+            ----------------------------------------------- */
+
+            body::before {
+                animation: none;
+            }
+
+            /* Show fewer floating petals/sparks on mobile */
+            .petal:nth-child(n+9) {
+                display: none;
+            }
+
+            .spark:nth-child(n+25) {
+                display: none;
+            }
+
+            /* backdrop-filter on the favorite heart runs on
+               EVERY card in the gallery - this is the single
+               biggest cause of scroll lag on phones */
+            .favorite {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(0,0,0,.55);
+            }
+
+            /* Lighter shadow per card + no entrance animation
+               (hundreds of cards animating at once = jank) */
+            .card {
+                box-shadow: 0 8px 20px rgba(0,0,0,.45);
+                animation: none;
+            }
+
+            .search-box input,
+            .zoom-controls,
+            .counter,
+            .nav-btn {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(20,20,24,.85);
             }
         }
 
@@ -1832,6 +2106,7 @@
                         src="{{ url_for('serve_image', filename=item.filename) }}"
                         alt="{{ item.title }}"
                         loading="lazy"
+                    decoding="async"
                         onerror="handleImageError(this)"
                     >
 
@@ -1877,6 +2152,7 @@
                     src="{{ url_for('serve_image', filename=item.filename) }}"
                     alt="{{ item.title }}"
                     loading="lazy"
+                    decoding="async"
                     onerror="handleImageError(this)"
                 >
 
@@ -1937,6 +2213,7 @@
                     src="{{ url_for('serve_image', filename=item.filename) }}"
                     alt="{{ item.title }}"
                     loading="lazy"
+                    decoding="async"
                     onerror="handleImageError(this)"
                 >
 
@@ -1980,6 +2257,84 @@
         Try another search or filter.
 
     </div>
+
+
+    <!-- =========================================================
+         FOLLOW / SOCIAL
+    ========================================================== -->
+
+    <footer class="social-footer">
+
+        <h2 class="social-heading">
+            Stay Connected
+        </h2>
+
+        <p class="social-subheading">
+            Follow DivinePixelDrop for new wallpaper drops, reels &amp; sneak peeks
+        </p>
+
+        <div class="social-links">
+
+            <a
+                class="social-card"
+                href="https://youtube.com/@aashu-pm9nm?si=eJqgbOkE_XGXFDpR"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Subscribe to DivinePixelDrop on YouTube"
+            >
+
+                <span class="social-icon youtube">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="9,7 9,17 17,12" fill="white"></polygon>
+                    </svg>
+                </span>
+
+                <div class="social-name">
+                    Subscribe on YouTube
+                </div>
+
+                <div class="social-desc">
+                    New wallpaper showcases &amp; uploads every week
+                </div>
+
+                <span class="social-cta">
+                    Watch Now
+                </span>
+
+            </a>
+
+
+            <a
+                class="social-card"
+                href="https://www.tiktok.com/@divinepixeldrop?is_from_webapp=1&sender_device=pc"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow DivinePixelDrop on TikTok"
+            >
+
+                <span class="social-icon tiktok">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 3v10.55A4 4 0 1 0 11 17V7h4V3H9z" fill="white"></path>
+                    </svg>
+                </span>
+
+                <div class="social-name">
+                    Follow on TikTok
+                </div>
+
+                <div class="social-desc">
+                    Daily wallpaper reels &amp; sneak peeks
+                </div>
+
+                <span class="social-cta">
+                    Follow Now
+                </span>
+
+            </a>
+
+        </div>
+
+    </footer>
 
 
     <!-- =========================================================
@@ -2267,6 +2622,12 @@
         const noResults =
             document.getElementById("noResults");
 
+        /* Cached once - gallery cards don't change after
+           page load, so we avoid re-querying the DOM every
+           time the user types in the search box */
+        const allCards =
+            document.querySelectorAll(".card");
+
         const resultCount =
             document.getElementById("resultCount");
 
@@ -2278,9 +2639,20 @@
            SEARCH
         ===================================================== */
 
+        let searchDebounce;
+
         searchInput.addEventListener(
             "input",
-            filterGallery
+            function() {
+
+                clearTimeout(searchDebounce);
+
+                searchDebounce =
+                    setTimeout(
+                        filterGallery,
+                        150
+                    );
+            }
         );
 
 
@@ -2293,7 +2665,7 @@
 
 
             const cards =
-                document.querySelectorAll(".card");
+                allCards;
 
 
             let visible = 0;
