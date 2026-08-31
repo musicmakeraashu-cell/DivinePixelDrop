@@ -7,7 +7,8 @@ from flask import (
     url_for,
     session,
     flash,
-    abort
+    abort,
+    Response
 )
 
 import os
@@ -723,6 +724,43 @@ def admin_delete(filename):
         url_for(
             "admin_dashboard"
         )
+    )
+
+
+# ============================================================
+# SEARCH ENGINE DISCOVERY
+# ============================================================
+
+@app.route("/robots.txt")
+def robots():
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://divinepixeldrop.onrender.com/sitemap.xml
+"""
+    return Response(content, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    content = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://divinepixeldrop.onrender.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+"""
+    return Response(content, mimetype="application/xml")
+
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon"
     )
 
 
