@@ -20,7 +20,8 @@ def init_db():
             description TEXT,
             category TEXT,
             tags TEXT,
-            featured INTEGER DEFAULT 0
+            featured INTEGER DEFAULT 0,
+            image_url TEXT
         )
     """)
 
@@ -38,6 +39,12 @@ def init_db():
         conn.execute(
             "ALTER TABLE wallpapers ADD COLUMN downloads INTEGER DEFAULT 0"
         )
+
+    if "image_url" not in existing_columns:
+        conn.execute("ALTER TABLE wallpapers ADD COLUMN image_url TEXT")
+
+    if "public_id" not in existing_columns:
+        conn.execute("ALTER TABLE wallpapers ADD COLUMN public_id TEXT")
 
     conn.commit()
     conn.close()
@@ -60,7 +67,9 @@ def get_metadata(filename):
         "tags": "",
         "featured": 0,
         "upload_date": None,
-        "downloads": 0
+        "downloads": 0,
+        "image_url": None,
+        "public_id": None
     }
 
 
@@ -71,11 +80,11 @@ def get_all_metadata():
     return {row["filename"]: dict(row) for row in rows}
 
 
-def save_metadata(filename, title, description, category, tags, featured):
+def save_metadata(filename, title, description, category, tags, featured, image_url=None, public_id=None):
     conn = get_connection()
 
     existing = conn.execute(
-        "SELECT upload_date FROM wallpapers WHERE filename = ?",
+        "SELECT upload_date, image_url, public_id FROM wallpapers WHERE filename = ?",
         (filename,)
     ).fetchone()
 
@@ -84,17 +93,25 @@ def save_metadata(filename, title, description, category, tags, featured):
     else:
         upload_date = datetime.datetime.now().isoformat()
 
+    if image_url is None and existing:
+        image_url = existing["image_url"]
+
+    if public_id is None and existing:
+        public_id = existing["public_id"]
+
     conn.execute("""
-        INSERT INTO wallpapers (filename, title, description, category, tags, featured, upload_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO wallpapers (filename, title, description, category, tags, featured, upload_date, image_url, public_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(filename) DO UPDATE SET
             title=excluded.title,
             description=excluded.description,
             category=excluded.category,
             tags=excluded.tags,
             featured=excluded.featured,
-            upload_date=excluded.upload_date
-    """, (filename, title, description, category, tags, featured, upload_date))
+            upload_date=excluded.upload_date,
+            image_url=COALESCE(excluded.image_url, wallpapers.image_url),
+            public_id=COALESCE(excluded.public_id, wallpapers.public_id)
+    """, (filename, title, description, category, tags, featured, upload_date, image_url, public_id))
     conn.commit()
     conn.close()
 

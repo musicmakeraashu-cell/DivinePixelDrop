@@ -12,6 +12,8 @@ from flask import (
 
 import os
 import time
+import cloudinary
+import cloudinary.uploader
 
 from werkzeug.security import (
     generate_password_hash,
@@ -22,6 +24,7 @@ import database
 
 
 app = Flask(__name__)
+cloudinary.config(secure=True)
 
 
 # ============================================================
@@ -37,21 +40,6 @@ LOGIN_ATTEMPTS = {}
 
 MAX_ATTEMPTS = 5
 LOCKOUT_SECONDS = 60
-
-
-# ============================================================
-# IMAGE FOLDER
-# ============================================================
-
-IMAGE_FOLDER = os.path.join(
-    app.static_folder,
-    "images"
-)
-
-os.makedirs(
-    IMAGE_FOLDER,
-    exist_ok=True
-)
 
 
 # ============================================================
@@ -108,38 +96,6 @@ def clean_filename(filename):
     return filename
 
 
-def image_path(filename):
-    """
-    Safely create the full image path.
-    """
-
-    filename = clean_filename(filename)
-
-    if not filename:
-        return None
-
-    full_path = os.path.abspath(
-        os.path.join(
-            IMAGE_FOLDER,
-            filename
-        )
-    )
-
-    image_folder_abs = os.path.abspath(
-        IMAGE_FOLDER
-    )
-
-    try:
-        if os.path.commonpath(
-            [full_path, image_folder_abs]
-        ) != image_folder_abs:
-            return None
-    except ValueError:
-        return None
-
-    return full_path
-
-
 def is_allowed_image(filename):
     """
     Check image extension.
@@ -160,46 +116,14 @@ def is_allowed_image(filename):
 # ============================================================
 
 def get_images():
-
-    images = []
-
     try:
-
-        for filename in os.listdir(
-            IMAGE_FOLDER
-        ):
-
-            file_path = image_path(
-                filename
-            )
-
-            if not file_path:
-                continue
-
-            if not os.path.isfile(
-                file_path
-            ):
-                continue
-
-            if not is_allowed_image(
-                filename
-            ):
-                continue
-
-            images.append(filename)
-
+        metadata_map = database.get_all_metadata()
+        images = [filename for filename, meta in metadata_map.items() if meta.get("image_url")]
+        images.sort(key=lambda name: name.lower())
+        return images
     except Exception as error:
-
-        print(
-            "Image loading error:",
-            error
-        )
-
-    images.sort(
-        key=lambda name: name.lower()
-    )
-
-    return images
+        print("Image loading error:", error)
+        return []
 
 
 # ============================================================
@@ -330,39 +254,18 @@ def home():
 # SERVE WALLPAPER
 # ============================================================
 
-@app.route(
-    "/images/<path:filename>"
-)
+@app.route("/images/<path:filename>")
 def serve_image(filename):
-
-    filename = clean_filename(
-        filename
-    )
-
-    if not filename:
+    filename = clean_filename(filename)
+    if not filename or not is_allowed_image(filename):
         abort(404)
-
-    if not is_allowed_image(
-        filename
-    ):
-        abort(404)
-
-    file_path = image_path(
-        filename
-    )
-
-    if not file_path:
-        abort(404)
-
-    if not os.path.isfile(
-        file_path
-    ):
-        abort(404)
-
-    return send_from_directory(
-        IMAGE_FOLDER,
-        filename
-    )
+    try:
+        meta = database.get_metadata(filename)
+        if meta.get("image_url"):
+            return redirect(meta["image_url"])
+    except Exception as error:
+        print("Cloudinary image loading error:", error)
+    abort(404)
 
 
 # ============================================================
@@ -563,122 +466,36 @@ def admin_logout():
 # UPLOAD WALLPAPERS
 # ============================================================
 
-@app.route(
-    "/admin/upload",
-    methods=["POST"]
-)
+@app.route("/admin/upload", methods=["POST"])
 def admin_upload():
-
     if not admin_logged_in():
-
-        return redirect(
-            url_for(
-                "admin_login"
-            )
-        )
-
-    files = request.files.getlist(
-        "images"
-    )
-
+        return redirect(url_for("admin_login"))
+    files = request.files.getlist("images")
     uploaded_count = 0
-
     skipped_count = 0
-
     for file in files:
-
-        if not file:
+        filename = clean_filename(file.filename or "")
+        if not filename or not is_allowed_image(filename):
             skipped_count += 1
             continue
-
-        original_filename = (
-            file.filename or ""
-        )
-
-        filename = clean_filename(
-            original_filename
-        )
-
-        if not filename:
-
-            skipped_count += 1
-
-            continue
-
-        if not is_allowed_image(
-            filename
-        ):
-
-            skipped_count += 1
-
-            continue
-
-        file_path = image_path(
-            filename
-        )
-
-        if not file_path:
-
-            skipped_count += 1
-
-            continue
-
         try:
-
-            file.save(
-                file_path
-            )
-
-            database.save_metadata(
-                filename,
-                filename,
-                "",
-                "Uncategorized",
-                "",
-                0
-            )
-
+            result = cloudinary.uploader.upload(file, folder="divinepixeldrop/wallpapers", resource_type="image", use_filename=True, unique_filename=True)
+            image_url = result.get("secure_url")
+            public_id = result.get("public_id")
+            if not image_url:
+                raise RuntimeError("Cloudinary did not return an image URL")
+            database.save_metadata(filename, filename, "", "Uncategorized", "", 0, image_url=image_url, public_id=public_id)
             uploaded_count += 1
-
         except Exception as error:
-
-            print(
-                "Upload error:",
-                error
-            )
-
+            print("Cloudinary upload error:", error)
             skipped_count += 1
-
-    if uploaded_count > 0:
-
-        message = (
-            f"{uploaded_count} wallpaper(s) "
-            f"uploaded successfully."
-        )
-
-        if skipped_count > 0:
-
-            message += (
-                f" {skipped_count} file(s) skipped."
-            )
-
-        flash(
-            message,
-            "success"
-        )
-
+    if uploaded_count:
+        msg=f"{uploaded_count} wallpaper(s) uploaded successfully."
+        if skipped_count: msg += f" {skipped_count} file(s) skipped."
+        flash(msg,"success")
     else:
-
-        flash(
-            "No valid image was uploaded.",
-            "error"
-        )
-
-    return redirect(
-        url_for(
-            "admin_dashboard"
-        )
-    )
+        flash("No valid image was uploaded.","error")
+    return redirect(url_for("admin_dashboard"))
 
 
 # ============================================================
@@ -716,13 +533,9 @@ def admin_edit(filename):
             )
         )
 
-    file_path = image_path(
-        filename
-    )
+    existing_meta = database.get_all_metadata().get(filename)
 
-    if not file_path or not os.path.isfile(
-        file_path
-    ):
+    if not existing_meta or not existing_meta.get("image_url"):
 
         flash(
             "Wallpaper not found.",
@@ -843,14 +656,15 @@ def admin_delete(filename):
             )
         )
 
-    file_path = image_path(
-        filename
-    )
+    existing_meta = database.get_all_metadata().get(filename)
 
-    if not file_path:
+    if not existing_meta:
+
+        # Nothing in the database for this filename.
+        # Nothing to delete on Cloudinary either.
 
         flash(
-            "Invalid wallpaper path.",
+            "Wallpaper was already missing.",
             "error"
         )
 
@@ -862,46 +676,36 @@ def admin_delete(filename):
 
     try:
 
-        if os.path.isfile(
-            file_path
-        ):
+        public_id = existing_meta.get("public_id")
 
-            os.remove(
-                file_path
-            )
-
-            # Delete matching database metadata
-            database.delete_metadata(
-                filename
-            )
-
-            flash(
-                "Wallpaper deleted successfully.",
-                "success"
-            )
-
-        else:
-
-            # Even if the image file is already gone,
-            # remove any stale database metadata.
+        if public_id:
 
             try:
 
-                database.delete_metadata(
-                    filename
+                cloudinary.uploader.destroy(
+                    public_id,
+                    resource_type="image"
                 )
 
-            except Exception as db_error:
+            except Exception as cloud_error:
+
+                # Don't block metadata cleanup just because
+                # the Cloudinary-side delete failed (e.g. the
+                # asset was already removed on Cloudinary).
 
                 print(
-                    "Metadata cleanup error:",
-                    db_error
+                    "Cloudinary delete error:",
+                    cloud_error
                 )
 
-            flash(
-                "Wallpaper was already missing.",
-                "error"
-            )
+        database.delete_metadata(
+            filename
+        )
+
+        flash(
+            "Wallpaper deleted successfully.",
+            "success"
+        )
 
     except Exception as error:
 
