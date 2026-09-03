@@ -1,64 +1,114 @@
-import sqlite3
-import os
+import time
 import datetime
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "wallpapers.db")
+# ============================================================
+# WHY THIS FILE CHANGED
+# ============================================================
+#
+# Render's free plan wipes the local disk on every restart, so a
+# sqlite file (wallpapers.db) living next to app.py used to lose
+# all its rows every time the server restarted -- even though the
+# actual images were safe on Cloudinary the whole time.
+#
+# Fix: instead of a separate local database, we now store each
+# wallpaper's title/description/category/tags/featured/downloads
+# directly on the Cloudinary asset itself, using Cloudinary's
+# built-in "context" (custom metadata) feature. Since Cloudinary
+# never gets wiped, the metadata can never get orphaned again.
+#
+# Every function below keeps the EXACT same name/inputs/outputs
+# that app.py already expects, so app.py and the templates do not
+# need to change at all.
 
+CLOUDINARY_FOLDER = "divinepixeldrop/wallpapers"
 
-def get_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+_cache = {"data": None, "time": 0}
+CACHE_SECONDS = 30  # small cache so a page with many views doesn't
+                     # hammer the Cloudinary API on every request
 
 
 def init_db():
-    conn = get_connection()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS wallpapers (
-            filename TEXT PRIMARY KEY,
-            title TEXT,
-            description TEXT,
-            category TEXT,
-            tags TEXT,
-            featured INTEGER DEFAULT 0,
-            image_url TEXT
-        )
-    """)
+    # Nothing to create anymore -- Cloudinary is the source of truth.
+    pass
 
-    existing_columns = [
-        row["name"]
-        for row in conn.execute("PRAGMA table_info(wallpapers)").fetchall()
-    ]
 
-    if "upload_date" not in existing_columns:
-        conn.execute(
-            "ALTER TABLE wallpapers ADD COLUMN upload_date TEXT"
-        )
+def _fetch_all_resources():
+    resources = []
+    next_cursor = None
+    while True:
+        params = {
+            "type": "upload",
+            "prefix": CLOUDINARY_FOLDER + "/",
+            "context": True,
+            "max_results": 500,
+        }
+        if next_cursor:
+            params["next_cursor"] = next_cursor
+        result = cloudinary.api.resources(**params)
+        resources.extend(result.get("resources", []))
+        next_cursor = result.get("next_cursor")
+        if not next_cursor:
+            break
+    return resources
 
-    if "downloads" not in existing_columns:
-        conn.execute(
-            "ALTER TABLE wallpapers ADD COLUMN downloads INTEGER DEFAULT 0"
-        )
 
-    if "image_url" not in existing_columns:
-        conn.execute("ALTER TABLE wallpapers ADD COLUMN image_url TEXT")
+def _resource_to_metadata(resource):
+    context = resource.get("context", {})
+    custom = context.get("custom", {}) if isinstance(context, dict) else {}
 
-    if "public_id" not in existing_columns:
-        conn.execute("ALTER TABLE wallpapers ADD COLUMN public_id TEXT")
+    filename = custom.get("filename") or resource.get("public_id", "").split("/")[-1]
 
-    conn.commit()
-    conn.close()
+    try:
+        featured = int(custom.get("featured", 0))
+    except (TypeError, ValueError):
+        featured = 0
+
+    try:
+        downloads = int(custom.get("downloads", 0))
+    except (TypeError, ValueError):
+        downloads = 0
+
+    return {
+        "filename": filename,
+        "title": custom.get("title") or filename,
+        "description": custom.get("description", ""),
+        "category": custom.get("category") or "Uncategorized",
+        "tags": custom.get("tags", ""),
+        "featured": featured,
+        "upload_date": custom.get("upload_date") or resource.get("created_at"),
+        "downloads": downloads,
+        "image_url": resource.get("secure_url"),
+        "public_id": resource.get("public_id"),
+    }
+
+
+def _get_all_cached(force=False):
+    now = time.time()
+    if force or _cache["data"] is None or (now - _cache["time"]) > CACHE_SECONDS:
+        try:
+            resources = _fetch_all_resources()
+        except Exception as error:
+            print("Cloudinary metadata fetch error:", error)
+            return _cache["data"] or {}
+
+        metadata_map = {}
+        for resource in resources:
+            meta = _resource_to_metadata(resource)
+            metadata_map[meta["filename"]] = meta
+
+        _cache["data"] = metadata_map
+        _cache["time"] = now
+
+    return _cache["data"]
 
 
 def get_metadata(filename):
-    conn = get_connection()
-    row = conn.execute(
-        "SELECT * FROM wallpapers WHERE filename = ?",
-        (filename,)
-    ).fetchone()
-    conn.close()
-    if row:
-        return dict(row)
+    metadata_map = _get_all_cached()
+    if filename in metadata_map:
+        return metadata_map[filename]
     return {
         "filename": filename,
         "title": filename,
@@ -69,66 +119,60 @@ def get_metadata(filename):
         "upload_date": None,
         "downloads": 0,
         "image_url": None,
-        "public_id": None
+        "public_id": None,
     }
 
 
 def get_all_metadata():
-    conn = get_connection()
-    rows = conn.execute("SELECT * FROM wallpapers").fetchall()
-    conn.close()
-    return {row["filename"]: dict(row) for row in rows}
+    return _get_all_cached()
 
 
 def save_metadata(filename, title, description, category, tags, featured, image_url=None, public_id=None):
-    conn = get_connection()
+    if not public_id:
+        existing = _get_all_cached().get(filename)
+        if existing:
+            public_id = existing.get("public_id")
 
-    existing = conn.execute(
-        "SELECT upload_date, image_url, public_id FROM wallpapers WHERE filename = ?",
-        (filename,)
-    ).fetchone()
+    if not public_id:
+        # We only reach here if we truly cannot find which Cloudinary
+        # asset this filename belongs to (shouldn't normally happen,
+        # since app.py always passes public_id right after upload).
+        print("save_metadata: no public_id found for", filename, "- skipped")
+        return
 
-    if existing and existing["upload_date"]:
-        upload_date = existing["upload_date"]
-    else:
-        upload_date = datetime.datetime.now().isoformat()
+    existing = _get_all_cached().get(filename, {})
+    upload_date = existing.get("upload_date") or datetime.datetime.now().isoformat()
+    downloads = existing.get("downloads", 0)
 
-    if image_url is None and existing:
-        image_url = existing["image_url"]
+    context = {
+        "filename": filename,
+        "title": title,
+        "description": description,
+        "category": category,
+        "tags": tags,
+        "featured": str(featured),
+        "upload_date": str(upload_date),
+        "downloads": str(downloads),
+    }
 
-    if public_id is None and existing:
-        public_id = existing["public_id"]
+    cloudinary.uploader.add_context(context, [public_id])
 
-    conn.execute("""
-        INSERT INTO wallpapers (filename, title, description, category, tags, featured, upload_date, image_url, public_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(filename) DO UPDATE SET
-            title=excluded.title,
-            description=excluded.description,
-            category=excluded.category,
-            tags=excluded.tags,
-            featured=excluded.featured,
-            upload_date=excluded.upload_date,
-            image_url=COALESCE(excluded.image_url, wallpapers.image_url),
-            public_id=COALESCE(excluded.public_id, wallpapers.public_id)
-    """, (filename, title, description, category, tags, featured, upload_date, image_url, public_id))
-    conn.commit()
-    conn.close()
+    _cache["time"] = 0  # force a fresh read next time
 
 
 def increment_downloads(filename):
-    conn = get_connection()
-    conn.execute("""
-        UPDATE wallpapers
-        SET downloads = COALESCE(downloads, 0) + 1
-        WHERE filename = ?
-    """, (filename,))
-    conn.commit()
-    conn.close()
+    metadata_map = _get_all_cached()
+    meta = metadata_map.get(filename)
+    if not meta or not meta.get("public_id"):
+        return
+
+    new_count = meta.get("downloads", 0) + 1
+    cloudinary.uploader.add_context({"downloads": str(new_count)}, [meta["public_id"]])
+    _cache["time"] = 0
 
 
 def delete_metadata(filename):
-    conn = get_connection()
-    conn.execute("DELETE FROM wallpapers WHERE filename = ?", (filename,))
-    conn.commit()
-    conn.close()
+    # app.py already destroys the Cloudinary asset (image + its
+    # context/metadata together) before calling this. We just make
+    # sure the next read pulls fresh data instead of a stale cache.
+    _cache["time"] = 0
