@@ -8,13 +8,15 @@ from flask import (
     session,
     flash,
     abort,
-    Response
+    Response,
+    jsonify
 )
 
 import os
 import time
 import cloudinary
 import cloudinary.uploader
+import cloudinary.utils
 
 from werkzeug.security import (
     generate_password_hash,
@@ -270,6 +272,42 @@ def serve_image(filename):
 
 
 # ============================================================
+# DOWNLOAD WALLPAPER (forces a real "Save As", not a preview)
+# ============================================================
+#
+# The old /images/<filename> route just redirects straight to the
+# Cloudinary image URL, which browsers treat as "open this image",
+# not "download this file". This route instead builds a special
+# Cloudinary URL with the "attachment" flag, which tells Cloudinary
+# to send the image back with a header that forces the browser's
+# save dialog, and also counts the download at the same time.
+
+@app.route("/download/<path:filename>")
+def download_image(filename):
+    filename = clean_filename(filename)
+    if not filename or not is_allowed_image(filename):
+        abort(404)
+    try:
+        meta = database.get_metadata(filename)
+        public_id = meta.get("public_id")
+        if public_id:
+            download_url, _ = cloudinary.utils.cloudinary_url(
+                public_id,
+                resource_type="image",
+                flags="attachment",
+                secure=True,
+            )
+            try:
+                database.increment_downloads(filename)
+            except Exception as error:
+                print("Download tracking error:", error)
+            return redirect(download_url)
+    except Exception as error:
+        print("Download error:", error)
+    abort(404)
+
+
+# ============================================================
 # TRACK DOWNLOAD
 # ============================================================
 
@@ -302,6 +340,30 @@ def track_download(filename):
         "",
         204
     )
+
+
+# ============================================================
+# LIKE A WALLPAPER
+# ============================================================
+#
+# Any visitor can call this (no login needed) to like a photo.
+# It saves the new count permanently on Cloudinary and sends the
+# updated number back so the page can update the heart/like count
+# without a full reload.
+
+@app.route("/like/<path:filename>", methods=["POST"])
+def like_image(filename):
+    filename = clean_filename(filename)
+    if not filename:
+        return jsonify({"error": "invalid filename"}), 400
+    try:
+        new_count = database.increment_likes(filename)
+        if new_count is None:
+            return jsonify({"error": "wallpaper not found"}), 404
+        return jsonify({"likes": new_count}), 200
+    except Exception as error:
+        print("Like error:", error)
+        return jsonify({"error": "could not save like"}), 500
 
 
 # ============================================================

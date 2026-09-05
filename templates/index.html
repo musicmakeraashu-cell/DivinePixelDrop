@@ -1065,6 +1065,34 @@
                 rgba(255,70,150,.8);
         }
 
+        .like-count {
+            position: absolute;
+
+            top: 14px;
+            right: 58px;
+
+            min-width: 22px;
+            padding: 2px 8px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(0,0,0,.45);
+
+            color: #ff9ec7;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            text-align: center;
+
+            z-index: 5;
+
+            backdrop-filter: blur(8px);
+
+            pointer-events: none;
+        }
+
         .name {
             padding: 14px;
 
@@ -2247,6 +2275,14 @@
                     ♡
                 </button>
 
+
+                <span
+                    class="like-count"
+                    id="likeCount-{{ item.index }}"
+                >
+                    {{ item.likes }}
+                </span>
+
             </div>
 
 
@@ -2569,6 +2605,12 @@
                     {{ url_for(
                         'serve_image',
                         filename=item.filename
+                    )|tojson }},
+
+                downloadUrl:
+                    {{ url_for(
+                        'download_image',
+                        filename=item.filename
                     )|tojson }}
             }
 
@@ -2586,6 +2628,8 @@
         let currentIndex = 0;
 
         let currentImageURL = "";
+
+        let currentDownloadURL = "";
 
         let currentImageName = "";
 
@@ -2889,8 +2933,12 @@
             event.stopPropagation();
 
 
+            const isAdding =
+                !favorites.includes(index);
+
+
             if (
-                favorites.includes(index)
+                !isAdding
             ) {
 
                 favorites =
@@ -2916,6 +2964,59 @@
             updateFavoriteButtons();
 
             filterGallery();
+
+
+            if (isAdding) {
+
+                const image =
+                    images[index];
+
+                if (image && image.name) {
+
+                    fetch(
+                        "/like/" +
+                            encodeURIComponent(
+                                image.name
+                            ),
+                        { method: "POST" }
+                    )
+                        .then(
+                            function(response) {
+                                return response.json();
+                            }
+                        )
+                        .then(
+                            function(data) {
+
+                                if (
+                                    typeof data.likes ===
+                                    "number"
+                                ) {
+
+                                    const countEl =
+                                        document.getElementById(
+                                            "likeCount-" + index
+                                        );
+
+                                    if (countEl) {
+
+                                        countEl.textContent =
+                                            data.likes;
+                                    }
+                                }
+                            }
+                        )
+                        .catch(
+                            function(error) {
+
+                                console.error(
+                                    "Like error:",
+                                    error
+                                );
+                            }
+                        );
+                }
+            }
         }
 
 
@@ -3010,6 +3111,9 @@
 
             currentImageURL =
                 image.url;
+
+            currentDownloadURL =
+                image.downloadUrl;
 
             currentImageName =
                 image.name;
@@ -3632,7 +3736,7 @@
             }
 
 
-            if (!currentImageURL) {
+            if (!currentDownloadURL) {
                 return;
             }
 
@@ -3642,7 +3746,7 @@
 
 
             link.href =
-                currentImageURL;
+                currentDownloadURL;
 
 
             link.download =
@@ -3829,6 +3933,9 @@
                     );
                 };
 
+
+            img.crossOrigin =
+                "anonymous";
 
             img.src =
                 currentImageURL;

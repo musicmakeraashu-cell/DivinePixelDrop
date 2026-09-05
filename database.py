@@ -71,6 +71,11 @@ def _resource_to_metadata(resource):
     except (TypeError, ValueError):
         downloads = 0
 
+    try:
+        likes = int(custom.get("likes", 0))
+    except (TypeError, ValueError):
+        likes = 0
+
     return {
         "filename": filename,
         "title": custom.get("title") or filename,
@@ -80,6 +85,7 @@ def _resource_to_metadata(resource):
         "featured": featured,
         "upload_date": custom.get("upload_date") or resource.get("created_at"),
         "downloads": downloads,
+        "likes": likes,
         "image_url": resource.get("secure_url"),
         "public_id": resource.get("public_id"),
     }
@@ -118,6 +124,7 @@ def get_metadata(filename):
         "featured": 0,
         "upload_date": None,
         "downloads": 0,
+        "likes": 0,
         "image_url": None,
         "public_id": None,
     }
@@ -169,6 +176,23 @@ def increment_downloads(filename):
     new_count = meta.get("downloads", 0) + 1
     cloudinary.uploader.add_context({"downloads": str(new_count)}, [meta["public_id"]])
     _cache["time"] = 0
+
+
+def increment_likes(filename):
+    """
+    Adds one like to a wallpaper and saves it permanently on
+    Cloudinary. Returns the new total, or None if the wallpaper
+    couldn't be found.
+    """
+    metadata_map = _get_all_cached()
+    meta = metadata_map.get(filename)
+    if not meta or not meta.get("public_id"):
+        return None
+
+    new_count = meta.get("likes", 0) + 1
+    cloudinary.uploader.add_context({"likes": str(new_count)}, [meta["public_id"]])
+    _cache["time"] = 0
+    return new_count
 
 
 def delete_metadata(filename):
