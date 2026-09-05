@@ -1341,6 +1341,19 @@
 
                 </div>
 
+
+                <div class="stat">
+
+                    <div class="stat-number">
+                        {{ visits }}
+                    </div>
+
+                    <div class="stat-label">
+                        Total Visits
+                    </div>
+
+                </div>
+
             </div>
 
 
@@ -1386,6 +1399,28 @@
                     >
 
                         <input
+                            type="text"
+                            id="uploadTitle"
+                            placeholder="Title (optional - applies to all selected files)"
+                            style="
+                                width: 100%;
+                                margin-bottom: 10px;
+                            "
+                        >
+
+
+                        <input
+                            type="text"
+                            id="uploadCategory"
+                            placeholder="Category (optional, e.g. Nature, Devotional)"
+                            style="
+                                width: 100%;
+                                margin-bottom: 10px;
+                            "
+                        >
+
+
+                        <input
                             class="file-input"
                             type="file"
                             name="images"
@@ -1405,9 +1440,107 @@
                             ⬆ Upload Wallpapers
                         </button>
 
+
+                        <div
+                            id="uploadProgress"
+                            style="
+                                display: none;
+                                margin-top: 16px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    background: rgba(255,255,255,.08);
+                                    border-radius: 20px;
+                                    overflow: hidden;
+                                    height: 10px;
+                                "
+                            >
+
+                                <div
+                                    id="uploadProgressFill"
+                                    style="
+                                        height: 100%;
+                                        width: 0%;
+                                        background: linear-gradient(90deg,#ff6fa5,#ff9ec7);
+                                        transition: width .3s ease;
+                                    "
+                                ></div>
+
+                            </div>
+
+
+                            <p
+                                id="uploadProgressText"
+                                style="
+                                    margin-top: 8px;
+                                    font-size: 13px;
+                                    color: #ccc;
+                                "
+                            ></p>
+
+                        </div>
+
                     </form>
 
                 </div>
+
+            </div>
+
+
+            <!-- CHANGE PASSWORD -->
+
+            <div class="panel">
+
+                <h2>
+                    🔑 Change Admin Password
+                </h2>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('admin_change_password') }}"
+                    class="edit-form"
+                >
+
+                    <input
+                        type="password"
+                        name="current_password"
+                        placeholder="Current Password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+
+                    <input
+                        type="password"
+                        name="new_password"
+                        placeholder="New Password"
+                        autocomplete="new-password"
+                        minlength="4"
+                        required
+                    >
+
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="Confirm New Password"
+                        autocomplete="new-password"
+                        minlength="4"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        🔒 Update Password
+                    </button>
+
+                </form>
 
             </div>
 
@@ -1607,8 +1740,14 @@
 
 
     /* ========================================================
-       UPLOAD LOADING STATE
+       UPLOAD (one file per request, with a real progress bar)
     ========================================================= */
+    //
+    // Sending all 20-25 files in one giant request used to time
+    // out on Render, which is why only the first photo or two
+    // would actually get saved. Uploading them one at a time
+    // instead avoids that timeout entirely and lets us show real
+    // progress ("Uploading 6 of 25...").
 
     document.addEventListener(
         "DOMContentLoaded",
@@ -1619,33 +1758,137 @@
                     'form[action*="admin_upload"]'
                 );
 
-
             if (!uploadForm) {
                 return;
             }
 
+            const fileInput =
+                uploadForm.querySelector('input[type="file"]');
+
+            const uploadBtn =
+                uploadForm.querySelector(".upload-btn");
+
+            const titleInput =
+                document.getElementById("uploadTitle");
+
+            const categoryInput =
+                document.getElementById("uploadCategory");
+
+            const progressWrap =
+                document.getElementById("uploadProgress");
+
+            const progressFill =
+                document.getElementById("uploadProgressFill");
+
+            const progressText =
+                document.getElementById("uploadProgressText");
 
             uploadForm.addEventListener(
                 "submit",
-                function() {
+                function(event) {
 
-                    const button =
-                        uploadForm.querySelector(
-                            ".upload-btn"
-                        );
+                    event.preventDefault();
 
-
-                    if (button) {
-
-                        button.disabled = true;
-
-                        button.innerHTML =
-                            "⏳ Uploading...";
-
-                    }
-
+                    uploadOneByOne();
                 }
             );
+
+            async function uploadOneByOne() {
+
+                const files =
+                    Array.from(fileInput.files || []);
+
+                if (!files.length) {
+
+                    alert(
+                        "Pehle kam se kam ek photo select kijiye."
+                    );
+
+                    return;
+                }
+
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = "⏳ Uploading...";
+
+                progressWrap.style.display = "block";
+
+                let successCount = 0;
+                let failCount = 0;
+
+                for (let i = 0; i < files.length; i++) {
+
+                    const file = files[i];
+
+                    progressText.textContent =
+                        "Uploading " + (i + 1) + " of " +
+                        files.length + ": " + file.name;
+
+                    const percentBefore =
+                        Math.round((i / files.length) * 100);
+
+                    progressFill.style.width =
+                        percentBefore + "%";
+
+                    const formData = new FormData();
+
+                    formData.append("images", file);
+
+                    formData.append(
+                        "title",
+                        titleInput ? titleInput.value.trim() : ""
+                    );
+
+                    formData.append(
+                        "category",
+                        categoryInput ? categoryInput.value.trim() : ""
+                    );
+
+                    formData.append("ajax", "1");
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                uploadForm.action,
+                                {
+                                    method: "POST",
+                                    body: formData
+                                }
+                            );
+
+                        const data =
+                            await response.json();
+
+                        if (data.uploaded && data.uploaded > 0) {
+                            successCount++;
+                        } else {
+                            failCount++;
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Upload error:",
+                            error
+                        );
+
+                        failCount++;
+                    }
+                }
+
+                progressFill.style.width = "100%";
+
+                progressText.textContent =
+                    "Done: " + successCount + " uploaded, " +
+                    failCount + " failed.";
+
+                setTimeout(
+                    function() {
+                        window.location.reload();
+                    },
+                    1200
+                );
+            }
 
         }
     );

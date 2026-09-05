@@ -200,3 +200,91 @@ def delete_metadata(filename):
     # context/metadata together) before calling this. We just make
     # sure the next read pulls fresh data instead of a stale cache.
     _cache["time"] = 0
+
+
+# ============================================================
+# SITE SETTINGS (visit counter + admin password)
+# ============================================================
+#
+# These need to survive restarts too, so instead of a local file
+# or a new database service, we store them the same way as
+# wallpaper metadata: as "context" on one small placeholder image
+# that lives on Cloudinary, separate from the real wallpapers.
+
+SETTINGS_PUBLIC_ID = "divinepixeldrop/system/site-settings"
+
+_settings_cache = {"data": None, "time": 0}
+SETTINGS_CACHE_SECONDS = 10
+
+# A tiny 1x1 transparent PNG, just used as a place to attach settings.
+_TINY_PLACEHOLDER_IMAGE = (
+    "data:image/png;base64,"
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+    "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+)
+
+
+def _ensure_settings_asset():
+    try:
+        cloudinary.api.resource(SETTINGS_PUBLIC_ID)
+        return
+    except Exception:
+        pass
+
+    try:
+        cloudinary.uploader.upload(
+            _TINY_PLACEHOLDER_IMAGE,
+            public_id=SETTINGS_PUBLIC_ID,
+            overwrite=False,
+            context={"visits": "0"},
+        )
+    except Exception as error:
+        print("Could not create site-settings asset:", error)
+
+
+def _get_settings_cached(force=False):
+    now = time.time()
+    if force or _settings_cache["data"] is None or (now - _settings_cache["time"]) > SETTINGS_CACHE_SECONDS:
+        try:
+            _ensure_settings_asset()
+            resource = cloudinary.api.resource(SETTINGS_PUBLIC_ID, context=True)
+            context = resource.get("context", {})
+            custom = context.get("custom", {}) if isinstance(context, dict) else {}
+            _settings_cache["data"] = dict(custom)
+            _settings_cache["time"] = now
+        except Exception as error:
+            print("Site settings fetch error:", error)
+            return _settings_cache["data"] or {}
+    return _settings_cache["data"]
+
+
+def get_visit_count():
+    settings = _get_settings_cached()
+    try:
+        return int(settings.get("visits", 0))
+    except (TypeError, ValueError):
+        return 0
+
+
+def increment_visits():
+    settings = _get_settings_cached()
+    try:
+        current = int(settings.get("visits", 0))
+    except (TypeError, ValueError):
+        current = 0
+
+    new_count = current + 1
+    cloudinary.uploader.add_context({"visits": str(new_count)}, [SETTINGS_PUBLIC_ID])
+    _settings_cache["time"] = 0
+    return new_count
+
+
+def get_password_hash(default_hash=None):
+    settings = _get_settings_cached()
+    stored = settings.get("password_hash")
+    return stored or default_hash
+
+
+def set_password_hash(new_hash):
+    cloudinary.uploader.add_context({"password_hash": new_hash}, [SETTINGS_PUBLIC_ID])
+    _settings_cache["time"] = 0

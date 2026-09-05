@@ -37,7 +37,13 @@ cloudinary.config(secure=True)
 app.secret_key = "DivinePixelDrop-Admin-Secret-Key-Change-Later"
 
 ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD_HASH = generate_password_hash("1234")
+
+# This is only the fallback used the very first time the site ever
+# runs. Once someone uses the "Change Password" form in the admin
+# panel, the real password hash lives permanently in Cloudinary
+# (see database.get_password_hash / database.set_password_hash),
+# so it survives Render restarts.
+DEFAULT_ADMIN_PASSWORD_HASH = generate_password_hash("1234")
 
 LOGIN_ATTEMPTS = {}
 
@@ -235,6 +241,11 @@ def admin_logged_in():
 @app.route("/")
 def home():
 
+    try:
+        database.increment_visits()
+    except Exception as error:
+        print("Visit tracking error:", error)
+
     gallery = get_gallery_data()
 
     categories = get_categories(
@@ -431,10 +442,14 @@ def admin_login():
             ""
         )
 
+        current_password_hash = database.get_password_hash(
+            default_hash=DEFAULT_ADMIN_PASSWORD_HASH
+        )
+
         if (
             username == ADMIN_USERNAME
             and check_password_hash(
-                ADMIN_PASSWORD_HASH,
+                current_password_hash,
                 password
             )
         ):
@@ -500,10 +515,17 @@ def admin_dashboard():
 
     gallery = get_gallery_data()
 
+    try:
+        visits = database.get_visit_count()
+    except Exception as error:
+        print("Visit count error:", error)
+        visits = 0
+
     return render_template(
         "admin.html",
         logged_in=True,
-        gallery=gallery
+        gallery=gallery,
+        visits=visits
     )
 
 
@@ -526,16 +548,75 @@ def admin_logout():
 
 
 # ============================================================
+# CHANGE ADMIN PASSWORD
+# ============================================================
+#
+# The new password is saved permanently on Cloudinary (via
+# database.set_password_hash), so it survives Render restarts
+# instead of resetting back to the old one.
+
+@app.route("/admin/change-password", methods=["POST"])
+def admin_change_password():
+
+    if not admin_logged_in():
+        return redirect(url_for("admin_login"))
+
+    current_password = request.form.get("current_password", "")
+    new_password = request.form.get("new_password", "")
+    confirm_password = request.form.get("confirm_password", "")
+
+    current_password_hash = database.get_password_hash(
+        default_hash=DEFAULT_ADMIN_PASSWORD_HASH
+    )
+
+    if not check_password_hash(current_password_hash, current_password):
+        flash("Current password is incorrect.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    if len(new_password) < 4:
+        flash("New password must be at least 4 characters.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    if new_password != confirm_password:
+        flash("New password and confirmation do not match.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    try:
+        new_hash = generate_password_hash(new_password)
+        database.set_password_hash(new_hash)
+        flash("Password updated successfully.", "success")
+    except Exception as error:
+        print("Password update error:", error)
+        flash("Could not update password. Please try again.", "error")
+
+    return redirect(url_for("admin_dashboard"))
+
+
+# ============================================================
 # UPLOAD WALLPAPERS
 # ============================================================
 
 @app.route("/admin/upload", methods=["POST"])
 def admin_upload():
+    is_ajax = request.form.get("ajax") == "1"
+
     if not admin_logged_in():
+        if is_ajax:
+            return jsonify({"error": "not logged in"}), 401
         return redirect(url_for("admin_login"))
+
     files = request.files.getlist("images")
+
+    # These are optional. The admin panel now sends the same title/
+    # category with every file in a batch (the frontend uploads one
+    # file per request), so a whole batch can be labelled together
+    # without needing to edit each photo afterwards.
+    title_input = request.form.get("title", "").strip()
+    category_input = request.form.get("category", "").strip() or "Uncategorized"
+
     uploaded_count = 0
     skipped_count = 0
+
     for file in files:
         filename = clean_filename(file.filename or "")
         if not filename or not is_allowed_image(filename):
@@ -547,11 +628,19 @@ def admin_upload():
             public_id = result.get("public_id")
             if not image_url:
                 raise RuntimeError("Cloudinary did not return an image URL")
-            database.save_metadata(filename, filename, "", "Uncategorized", "", 0, image_url=image_url, public_id=public_id)
+            final_title = title_input or filename
+            database.save_metadata(filename, final_title, "", category_input, "", 0, image_url=image_url, public_id=public_id)
             uploaded_count += 1
         except Exception as error:
             print("Cloudinary upload error:", error)
             skipped_count += 1
+
+    if is_ajax:
+        return jsonify({
+            "uploaded": uploaded_count,
+            "skipped": skipped_count
+        }), 200
+
     if uploaded_count:
         msg=f"{uploaded_count} wallpaper(s) uploaded successfully."
         if skipped_count: msg += f" {skipped_count} file(s) skipped."
